@@ -1,6 +1,6 @@
 #include "test_malloc.h"
 #include "testing.h"
-#include "tp3.h"
+#include "HashMap.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>

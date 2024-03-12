@@ -1,4 +1,4 @@
-#include "tp3.h"
+#include "HashMap.h"
 
 
 bool rehash(dictionary_t *dict, int newSize){

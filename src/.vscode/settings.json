@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "queryable_dict.h": "c",
+        "hashmap.h": "c"
+    }
+}

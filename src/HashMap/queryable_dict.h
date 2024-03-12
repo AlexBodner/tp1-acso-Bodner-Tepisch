@@ -1,6 +1,6 @@
 #include <stdbool.h>
 #include <stddef.h>
-#include "tp3.h"
+#include "HashMap.h"
 
 /*
  * Punto extra de queryable dict, suma 3 puntos como máximo.
