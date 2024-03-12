@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "komihash.h": "c",
+        "spooky.h": "c",
+        "murmurhash.h": "c",
+        "cstdint": "c",
+        "t1ha0_ia32aes_b.h": "c",
+        "t1ha0_ia32aes_a.h": "c",
+        "t1ha.h": "c",
+        "hashtable.h": "c",
+        "initializer_list": "c",
+        "type_traits": "c",
+        "xstring": "c",
+        "xutility": "c",
+        "math.h": "c"
+    }
+}
