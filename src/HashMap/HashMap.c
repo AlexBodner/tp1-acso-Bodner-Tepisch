@@ -84,11 +84,14 @@ bool dictionary_put(dictionary_t *dictionary, const char *key, void *value){
 
 void *dictionary_get(dictionary_t *dictionary, const char *key, bool *err){
   long int position = table_search(dictionary->tabla,key);
-  if(position == -1){
+  if (err!=NULL){
+    if(position == -1){
     *err = true;
     return NULL;
   }
   *err = false;
+  }
+  
   
   return getValue(&dictionary->tabla->registros[position]);
 }

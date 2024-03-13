@@ -5,7 +5,7 @@
 #include "HashMap/HashMap.h"
 
 int opLengths[] ={7+1, 10+1} ;
-dictionary_t *  opcodesMap = NULL;
+dictionary_t *  opcodesMap = NULL; //FALTA LIBERARLO AL FINAL DE TODO
 //Insert OPCode, func *
 //habria que sumarle un 1 al principio a todos los opcodes
 void addsExtendedReg(){
@@ -31,13 +31,16 @@ char* toBinaryString(int n) {
 }
 void process_instruction()
 {
-    if (opcodesMap =NULL){ 
+    if (opcodesMap == NULL){ 
+        puts("crea dict");
         opcodesMap = dictionary_create(NULL);
         dictionary_put(opcodesMap, "101011001", &addsExtendedReg); // ya con el 1 de sf agregado
         dictionary_put(opcodesMap, "10110001", &addsImm); // ya con el 1 de sf agregado
     } 
     
     char * pcContentAsString = toBinaryString(mem_read_32(CURRENT_STATE.PC));
+    printf(" pcContentAsString %s", pcContentAsString );
+
     void (*func_ptr)() = NULL;
     for (int i = 0;i<sizeof(opLengths)/ sizeof(int);i++){
         puts("aca");
@@ -45,12 +48,13 @@ void process_instruction()
         strncpy(opCodeString, pcContentAsString , opLengths[i]);
         puts("aca x2");
         printf("opcode string %s", opCodeString);
+
         if (dictionary_contains(opcodesMap, opCodeString)){
             puts("aca x3");
-            func_ptr= dictionary_get(opcodesMap,opCodeString, NULL);
+            func_ptr = dictionary_get(opcodesMap,opCodeString, NULL);
 
         }
-
+        puts("sale");
         free(opCodeString);
     }
     if (func_ptr == NULL){
