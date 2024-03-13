@@ -29,9 +29,9 @@ char* toBinaryString(int n) {
   cadena[num_bits] = '\0';
   return cadena;
 }
-void process_instruction()
-{
-    if (opcodesMap == NULL){ 
+
+void decode(void (**fill_func_prt) ){
+ if (opcodesMap == NULL){ 
         puts("crea dict");
         opcodesMap = dictionary_create(NULL);
         dictionary_put(opcodesMap, "101011001", &addsExtendedReg); // ya con el 1 de sf agregado
@@ -41,7 +41,6 @@ void process_instruction()
     char * pcContentAsString = toBinaryString(mem_read_32(CURRENT_STATE.PC));
     printf(" pcContentAsString %s", pcContentAsString );
 
-    void (*func_ptr)() = NULL;
     for (int i = 0;i<sizeof(opLengths)/ sizeof(int);i++){
         puts("aca");
         char * opCodeString = malloc(sizeof(char) * (opLengths[i]));
@@ -51,12 +50,18 @@ void process_instruction()
 
         if (dictionary_contains(opcodesMap, opCodeString)){
             puts("aca x3");
-            func_ptr = dictionary_get(opcodesMap,opCodeString, NULL);
+            *fill_func_prt = dictionary_get(opcodesMap,opCodeString, NULL);
 
         }
         puts("sale");
         free(opCodeString);
     }
+    free(pcContentAsString);
+    return;
+}
+void process_instruction(){
+    void (*func_ptr)() = NULL;
+    decode(&func_ptr );
     if (func_ptr == NULL){
         //la instruccion no fue encontrada
     }
@@ -64,7 +69,6 @@ void process_instruction()
         (*func_ptr)();
         //Execute
     }
-    free(pcContentAsString);
     //printf("printing PC %b " ,mem_read_32(CURRENT_STATE.PC));
     /* execute one instruction here. You should use CURRENT_STATE and modify
      * values in NEXT_STATE. You can call mem_read_32() and mem_write_32() to
