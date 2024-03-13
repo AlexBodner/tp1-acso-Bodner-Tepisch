@@ -1,6 +1,5 @@
 #include "HashMap.h"
 
-
 bool rehash(dictionary_t *dict, int newSize){
     //printf("entra con carga %f", dict->tabla->carga);
     //puts("flush");
