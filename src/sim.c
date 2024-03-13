@@ -30,7 +30,7 @@ char* toBinaryString(int n) {
   return cadena;
 }
 
-void decode(void (**fill_func_prt) ){
+char *  decode(void (**fill_func_prt) ){
  if (opcodesMap == NULL){ 
         puts("crea dict");
         opcodesMap = dictionary_create(NULL);
@@ -40,7 +40,7 @@ void decode(void (**fill_func_prt) ){
     
     char * pcContentAsString = toBinaryString(mem_read_32(CURRENT_STATE.PC));
     printf(" pcContentAsString %s", pcContentAsString );
-
+    int opcodeSize;
     for (int i = 0;i<sizeof(opLengths)/ sizeof(int);i++){
         puts("aca");
         char * opCodeString = malloc(sizeof(char) * (opLengths[i]));
@@ -51,17 +51,23 @@ void decode(void (**fill_func_prt) ){
         if (dictionary_contains(opcodesMap, opCodeString)){
             puts("aca x3");
             *fill_func_prt = dictionary_get(opcodesMap,opCodeString, NULL);
-
+            opcodeSize =  opLengths[i];
+            free(opCodeString);
+            break;
         }
         puts("sale");
         free(opCodeString);
     }
+    char * restOfInstruction = malloc(sizeof(char) * (32- opcodeSize));
+    strncpy(restOfInstruction, pcContentAsString+opcodeSize , 32- opcodeSize);
+
     free(pcContentAsString);
-    return;
+    return restOfInstruction;
 }
+
 void process_instruction(){
     void (*func_ptr)() = NULL;
-    decode(&func_ptr );
+    char * instructionParams = decode(&func_ptr );
     if (func_ptr == NULL){
         //la instruccion no fue encontrada
     }
