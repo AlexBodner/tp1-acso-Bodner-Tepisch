@@ -7,56 +7,139 @@
 int opLengths[] ={7+1, 10+1} ;
 //Insert OPCode, func *
 //habria que sumarle un 1 al principio a todos los opcodes
-void addsExtendedReg(char * restOfInstruction){
-    puts("extended");
-    return ;
-}
 void HALT(char * restOfInstruction){
     puts("halt");
     RUN_BIT = 0;
     return ;
 }
+
+void addsExtendedReg(char * restOfInstruction){
+    puts("addsExtendedReg");
+    return ;
+}
+
 void addsImm(char * restOfInstruction){
-    puts("Imm");
+    puts("addsImm");
     //ADDS Xn + imm to Xd
     //bits 23 y 22 son de shift y deberian ser 00 
     //imm del 21 al 10 inclusives 
     //Rn del 9 al 5 
     //Rd 4 al 0
+    
+    // guardamos el inmediato 
     char * immStr = malloc(sizeof(char) * (12));
     strncpy(immStr, restOfInstruction+2 , 12);
     int immNum= (int) strtol(immStr, NULL, 2);
 
+    //guardamos Rn
     char * RnStr = malloc(sizeof(char) * (5));
     strncpy(RnStr, restOfInstruction+14 , 5);
     int RnNum= (int) strtol(RnStr, NULL, 2);
+    int rnContent = CURRENT_STATE.REGS[RnNum];
 
+    //guardamos Rd
     char * RdStr = malloc(sizeof(char) * (5));
     strncpy(RdStr, restOfInstruction+14+5 , 5);
     int RdNum= (int) strtol(RdStr, NULL, 2);
-    int rdContent = CURRENT_STATE.REGS[RdNum];
-    int result = rdContent + immNum;
-    if (result<0){
-        //set negative flag
-        NEXT_STATE.FLAG_N = 1;
-    } 
-    else{
-        NEXT_STATE.FLAG_N = 0;
-    }
-    if (result == 0){
-        //set 0 Flag
-        NEXT_STATE.FLAG_Z = 1;
-    }
-    else{
-        NEXT_STATE.FLAG_Z = 0;
 
-    }
+    //Hacemos la operacion
+    int result = rnContent + immNum;
+    printf("Rd %i\n", RdNum);
+    NEXT_STATE.FLAG_N = (result < 0);  // Si result es menor que 0, FLAG_N se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
+    NEXT_STATE.FLAG_Z = (result == 0); // Si result es igual a 0, FLAG_Z se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
+
 
     NEXT_STATE.REGS[RdNum]  = result;
     printf("Result %i\n", result);
     NEXT_STATE.PC+= 4;
+    free(immStr);
+    free(RnStr);
+    free(RdStr);
     return ;
 }
+
+void subsExtendedReg(char * restOfInstruction){
+    puts("subsExtendedReg");
+    return ;
+}
+
+void subsImm(char * restOfInstruction){
+    puts("subsImm");
+    // Revisar como se guarda la resta
+    
+    //ADDS Xn - imm to Xd
+    //bits 23 y 22 son de shift y deberian ser 00 
+    //imm del 21 al 10 inclusives 
+    //Rn del 9 al 5 
+    //Rd 4 al 0
+    
+    // guardamos el inmediato 
+    char * immStr = malloc(sizeof(char) * (12));
+    strncpy(immStr, restOfInstruction+2 , 12);
+    int immNum= (int) strtol(immStr, NULL, 2);
+
+    //guardamos Rn
+    char * RnStr = malloc(sizeof(char) * (5));
+    strncpy(RnStr, restOfInstruction+14 , 5);
+    int RnNum= (int) strtol(RnStr, NULL, 2);
+    int rnContent = CURRENT_STATE.REGS[RnNum];
+
+    //guardamos Rd
+    char * RdStr = malloc(sizeof(char) * (5));
+    strncpy(RdStr, restOfInstruction+14+5 , 5);
+    int RdNum= (int) strtol(RdStr, NULL, 2);
+
+    //Hacemos la operacion
+    int result = rnContent - immNum;
+    printf("Rd %i\n", RdNum);
+    NEXT_STATE.FLAG_N = (result < 0);  // Si result es menor que 0, FLAG_N se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
+    NEXT_STATE.FLAG_Z = (result == 0); // Si result es igual a 0, FLAG_Z se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
+
+
+    NEXT_STATE.REGS[RdNum]  = result;
+    printf("Result %i\n", result);
+    NEXT_STATE.PC+= 4;
+    free(immStr);
+    free(RnStr);
+    free(RdStr);
+    return ;
+}
+
+void compImm(char * restOfInstruction){
+    puts("compImm");
+    // Revisar como se guarda la resta
+    
+    //ADDS Xn - imm to Xd
+    //bits 23 y 22 son de shift y deberian ser 00 
+    //imm del 21 al 10 inclusives 
+    //Rn del 9 al 5 
+    //Rd 4 al 0
+    
+    // guardamos el inmediato 
+    char * immStr = malloc(sizeof(char) * (12));
+    strncpy(immStr, restOfInstruction+2 , 12);
+    int immNum= (int) strtol(immStr, NULL, 2);
+
+    //guardamos Rn
+    char * RnStr = malloc(sizeof(char) * (5));
+    strncpy(RnStr, restOfInstruction+14 , 5);
+    int RnNum= (int) strtol(RnStr, NULL, 2);
+    int rnContent = CURRENT_STATE.REGS[RnNum];
+
+    //Hacemos la operacion
+    int result = rnContent - immNum;
+    NEXT_STATE.FLAG_N = (result < 0);  // Si result es menor que 0, FLAG_N se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
+    NEXT_STATE.FLAG_Z = (result == 0); // Si result es igual a 0, FLAG_Z se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
+
+;
+    printf("Result %i\n", result);
+    NEXT_STATE.PC+= 4;
+    free(immStr);
+    free(RnStr);
+    return ;
+}
+
+
 char* toBinaryString(int n) {
   int num_bits = 32;
   char *cadena = malloc(num_bits + 1);
@@ -77,8 +160,12 @@ char *  decode(void (**fill_func_prt) ){
     if (opcodesMap == NULL){ 
         puts("crea dict");
         opcodesMap = dictionary_create(NULL);
-        dictionary_put(opcodesMap, "101011001", &addsExtendedReg); // ya con el 1 de sf agregado
+        // chequear los numeros extended
+        dictionary_put(opcodesMap, "10101011001", &addsExtendedReg); // ya con el 1 de sf agregado
         dictionary_put(opcodesMap, "10110001", &addsImm); // ya con el 1 de sf agregado
+        dictionary_put(opcodesMap, "1101011001", &subsExtendedReg); // ya con el 1 de sf agregado
+        dictionary_put(opcodesMap, "11110001", &subsImm); // ya con el 1 de sf agregado
+        dictionary_put(opcodesMap, "11110001", &compImm); // ya con el 1 de sf agregado
         dictionary_put(opcodesMap, "11010100", &HALT); // ya con el 1 de sf agregado
 
     } 
