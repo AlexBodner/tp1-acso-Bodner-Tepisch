@@ -8,12 +8,10 @@ int opLengths[] ={7+1, 10+1} ;
 //Insert OPCode, func *
 //habria que sumarle un 1 al principio a todos los opcodes
 void addsExtendedReg(char * restOfInstruction){
-
     puts("extended");
     return ;
 }
 void HALT(char * restOfInstruction){
-
     puts("halt");
     RUN_BIT = 0;
     return ;
@@ -36,8 +34,8 @@ void addsImm(char * restOfInstruction){
     char * RdStr = malloc(sizeof(char) * (5));
     strncpy(RdStr, restOfInstruction+14+5 , 5);
     int RdNum= (int) strtol(RdStr, NULL, 2);
-
-    int result = RnNum + immNum;
+    int rdContent = CURRENT_STATE.REGS[RdNum];
+    int result = rdContent + immNum;
     if (result<0){
         //set negative flag
         NEXT_STATE.FLAG_N = 1;
@@ -55,6 +53,7 @@ void addsImm(char * restOfInstruction){
     }
 
     NEXT_STATE.REGS[RdNum]  = result;
+    printf("Result %i\n", result);
     NEXT_STATE.PC+= 4;
     return ;
 }
