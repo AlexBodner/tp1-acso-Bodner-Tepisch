@@ -31,6 +31,22 @@ void addsImm(char * restOfInstruction){
     strncpy(immStr, restOfInstruction+2 , 12);
     int immNum= (int) strtol(immStr, NULL, 2);
 
+
+    char * shiftBytes = malloc(sizeof(char) * (2));
+
+    int shiftStatus = strcmp(shiftBytes,"01");
+    int shiftStatus2 = strcmp(shiftBytes,"00");
+    if (shiftStatus ==0){
+        //hacemos shift 12 a la izq
+        immNum = immNum << 12;
+    }
+    else if(shiftStatus2 ==0){
+        //hacemos sin shift
+    } 
+    else{
+        //no hacer nada porque no es la instruccion adecuada? preguntar
+    }
+
     //guardamos Rn
     char * RnStr = malloc(sizeof(char) * (5));
     strncpy(RnStr, restOfInstruction+14 , 5);
@@ -129,7 +145,7 @@ void compImm(char * restOfInstruction){
     NEXT_STATE.FLAG_N = (result < 0);  // Si result es menor que 0, FLAG_N se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
     NEXT_STATE.FLAG_Z = (result == 0); // Si result es igual a 0, FLAG_Z se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
 
-;
+
     printf("Result %i\n", result);
     NEXT_STATE.PC+= 4;
     free(immStr);
@@ -167,7 +183,6 @@ void AndsShiftedReg(char * restOfInstruction){
     NEXT_STATE.FLAG_N = (result < 0);  // Si result es menor que 0, FLAG_N se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
     NEXT_STATE.FLAG_Z = (result == 0); // Si result es igual a 0, FLAG_Z se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
 
-;
     printf("Result %i\n", result);
     NEXT_STATE.PC+= 4;
     free(RmStr);
@@ -275,7 +290,7 @@ void B(char * restOfInstruction){
     strncpy(immStr, restOfInstruction , 26);
     long immNum= strtol(immStr, NULL, 2);
     free(immStr);
-    immNum = signExtended26to64(immNum) << 2;
+    immNum = signExtend26to64(immNum) << 2;
     printf("Result %ld\n", immNum);
     NEXT_STATE.PC = CURRENT_STATE.PC+immNum;
     return ;
