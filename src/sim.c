@@ -465,8 +465,6 @@ void LslImm(char * restOfInstruction){
     NEXT_STATE.REGS[RdNum] = result;
 
     printf("Rd %i\n", RdNum);
-
-
     printf("Result %i\n", result);
     NEXT_STATE.PC  += 4;
     return ;
