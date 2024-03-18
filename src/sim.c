@@ -64,7 +64,7 @@ char *  decode(void (**fill_func_prt) ){
         puts("crea dict");
         opcodesMap = dictionary_create(NULL);
         // chequear los numeros extended
-        // dictionary_put(opcodesMap, "10101011001", &addsExtendedReg); //ya con el 1 de sf agregado 
+         dictionary_put(opcodesMap, "10101011001", &addsExtendedReg); //ya con el 1 de sf agregado 
         dictionary_put(opcodesMap, "10110001", &addsImm); // pag. 531
         // dictionary_put(opcodesMap, "1101011001", &subsExtendedReg); // 
         dictionary_put(opcodesMap, "11110001", &subsImm); // pag. 936

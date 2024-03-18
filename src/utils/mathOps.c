@@ -1,6 +1,40 @@
 #include "mathOps.h"
 void addsExtendedReg(char * restOfInstruction){
     puts("addsExtendedReg");
+    //ADDS Xn + Xm to Xd
+
+    //guardamos Rm
+    char * RmStr = malloc(sizeof(char) * (5));
+    strncpy(RmStr, restOfInstruction, 5);
+    int RmNum= (int) strtol(RmStr, NULL, 2);
+    int rmContent = CURRENT_STATE.REGS[RmNum];
+
+
+    //guardamos Rn
+    char * RnStr = malloc(sizeof(char) * (5));
+    strncpy(RnStr, restOfInstruction+5+6 , 5);
+    int RnNum= (int) strtol(RnStr, NULL, 2);
+    int rnContent = CURRENT_STATE.REGS[RnNum];
+
+    //guardamos Rd
+    char * RdStr = malloc(sizeof(char) * (5));
+    strncpy(RdStr, restOfInstruction+5+6+5 , 5);
+    int RdNum= (int) strtol(RdStr, NULL, 2);
+
+    //Hacemos la operacion
+    int result = rnContent + rmContent;
+    printf("Rd %i\n", RdNum);
+    NEXT_STATE.FLAG_N = (result < 0);  // Si result es menor que 0, FLAG_N se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
+    NEXT_STATE.FLAG_Z = (result == 0); // Si result es igual a 0, FLAG_Z se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
+
+
+    NEXT_STATE.REGS[RdNum]  = result;
+    printf("Result %i\n", result);
+    NEXT_STATE.PC+= 4;
+    free(RmStr);
+    free(RnStr);
+    free(RdStr);
+
     return ;
 }
 
