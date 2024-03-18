@@ -1,8 +1,10 @@
 #pragma once
 #include "../shell.h" 
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
 #include <string.h>
+
 void addsExtendedReg(char * restOfInstruction);
 void addsImm(char * restOfInstruction);
 void addsExtendedReg(char * restOfInstruction);
