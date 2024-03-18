@@ -1,14 +1,17 @@
 #include "shift.h"
-
 void LslImm(char * restOfInstruction){
     puts("LslImm");
-    //ADDS Xn + imm to Xd
     //bit 22 es N 
     //immr del 21 al 16 inclusives 
     //imms del 15 al 10 
     //Rn del 9 al 5 
     //Rd 4 al 0
-    
+
+    char * NStr = malloc(1); 
+    strncpy(NStr, restOfInstruction, 1);
+    int N = (int) strtol(NStr, NULL, 2);
+    free(NStr);
+
 
     // guardamos el inmediatoR 
     char * immrStr = malloc(6); 
@@ -23,7 +26,6 @@ void LslImm(char * restOfInstruction){
     free(immsStr);
 
     int shiftAmount = (immr == 0) ? imms : 64 - immr;
-
     // extraemos Rn
     char * RnStr = malloc(5);
     strncpy(RnStr, restOfInstruction + 13, 5);

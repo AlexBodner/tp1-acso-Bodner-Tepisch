@@ -1,11 +1,7 @@
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include "../shell.h"
+#include "branch.h"
 
 
-
-long signExtend26to64(long value) {
+int64_t signExtend26to64(long value) {
     // Verificar si el bit 25 (el bit más significativo de imm26) está establecido
     if (value & (1 << 25)) {
         // Extender el signo
@@ -16,14 +12,14 @@ long signExtend26to64(long value) {
 
 void B(char * restOfInstruction){
     puts("B");    
-    //ADDS Xn & imm to Xd
     //imm del 25 al 0 inclusives 
 
     // guardamos el inmediato 
     char * immStr = malloc(sizeof(char) * (26));
     strncpy(immStr, restOfInstruction , 26);
-    long immNum= strtol(immStr, NULL, 2);
+    int64_t immNum= strtol(immStr, NULL, 2);
     free(immStr);
+
     immNum = signExtend26to64(immNum) << 2;
     printf("Result %ld\n", immNum);
     NEXT_STATE.PC = CURRENT_STATE.PC+immNum;
@@ -38,7 +34,7 @@ void Br(char * restOfInstruction){
     // guardamos el Rn 
     //guardamos Rn
     char * RnStr = malloc(sizeof(char) * (5));
-    strncpy(RnStr, restOfInstruction+27 , 5);
+    strncpy(RnStr, restOfInstruction , 5);
     int RnNum= (int) strtol(RnStr, NULL, 2);
     free(RnStr);
     printf("Result %i\n", RnNum);
