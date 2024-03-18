@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include "../shell.h"
+#include "shift.h"
 
 void LslImm(char * restOfInstruction){
     puts("LslImm");

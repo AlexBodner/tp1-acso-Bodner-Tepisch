@@ -101,9 +101,6 @@ char *  decode(void (**fill_func_prt) ){
         // dictionary_put(opcodesMap, "", &Mul); // ya con el 1 de sf agregaB
         // dictionary_put(opcodesMap, "", &Cbz); // ya con el 1 de sf agregaB
         // dictionary_put(opcodesMap, "", &Cbnz); // ya con el 1 de sf agregaB
-
-
-
     } 
     
     char * pcContentAsString = toBinaryString(mem_read_32(CURRENT_STATE.PC));
