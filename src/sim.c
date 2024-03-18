@@ -26,13 +26,15 @@ void addsImm(char * restOfInstruction){
     //Rn del 9 al 5 
     //Rd 4 al 0
     
+    char * shiftBytes = malloc(sizeof(char) * (2));
+    strncpy(shiftBytes, restOfInstruction , 2);
+
     // guardamos el inmediato 
     char * immStr = malloc(sizeof(char) * (12));
     strncpy(immStr, restOfInstruction+2 , 12);
     int immNum= (int) strtol(immStr, NULL, 2);
 
 
-    char * shiftBytes = malloc(sizeof(char) * (2));
 
     int shiftStatus = strcmp(shiftBytes,"01");
     int shiftStatus2 = strcmp(shiftBytes,"00");
@@ -68,6 +70,7 @@ void addsImm(char * restOfInstruction){
     NEXT_STATE.REGS[RdNum]  = result;
     printf("Result %i\n", result);
     NEXT_STATE.PC+= 4;
+    free(shiftBytes);
     free(immStr);
     free(RnStr);
     free(RdStr);
@@ -88,6 +91,9 @@ void subsImm(char * restOfInstruction){
     //imm del 21 al 10 inclusives 
     //Rn del 9 al 5 
     //Rd 4 al 0
+
+    char * shiftBytes = malloc(sizeof(char) * (2));
+    strncpy(shiftBytes, restOfInstruction , 2);
     
     // guardamos el inmediato 
     char * immStr = malloc(sizeof(char) * (12));
@@ -105,6 +111,20 @@ void subsImm(char * restOfInstruction){
     strncpy(RdStr, restOfInstruction+14+5 , 5);
     int RdNum= (int) strtol(RdStr, NULL, 2);
 
+    int shiftStatus = strcmp(shiftBytes,"01");
+    int shiftStatus2 = strcmp(shiftBytes,"00");
+    if (shiftStatus ==0){
+        //hacemos shift 12 a la izq
+        immNum = immNum << 12;
+    }
+    else if(shiftStatus2 ==0){
+        //hacemos sin shift
+    } 
+    else{
+        //no hacer nada porque no es la instruccion adecuada? preguntar
+    }
+
+
     //Hacemos la operacion
     int result = rnContent - immNum;
     printf("Rd %i\n", RdNum);
@@ -118,6 +138,7 @@ void subsImm(char * restOfInstruction){
     free(immStr);
     free(RnStr);
     free(RdStr);
+    free(shiftBytes);
     return ;
 }
 
@@ -835,9 +856,9 @@ char *  decode(void (**fill_func_prt) ){
         opcodesMap = dictionary_create(NULL);
         // chequear los numeros extended
         // dictionary_put(opcodesMap, "10101011001", &addsExtendedReg); //ya con el 1 de sf agregado 
-        dictionary_put(opcodesMap, "10110001", &addsImm); // 
+        dictionary_put(opcodesMap, "10110001", &addsImm); // pag. 531
         // dictionary_put(opcodesMap, "1101011001", &subsExtendedReg); // 
-        dictionary_put(opcodesMap, "11110001", &subsImm); // 
+        dictionary_put(opcodesMap, "11110001", &subsImm); // pag. 936
         dictionary_put(opcodesMap, "11010100", &HLT); // 
         // dictionary_put(opcodesMap, "", &compExtendedReg); // 
         dictionary_put(opcodesMap, "11110001", &compImm); // Revisar como se guarda la resta
