@@ -9,11 +9,13 @@
 #include "utils/mathOps.h"
 #include "utils/shift.h"
 
-int opLengths[] ={7+1, 10+1} ;
+int opLengths[] ={7+1, 9, 10+1} ;
 
 void HLT(char * restOfInstruction){
     puts("hlt");
     RUN_BIT = 0;
+    NEXT_STATE.PC+= 4;
+
     return ;
 }
 
@@ -61,12 +63,11 @@ char *  decode(void (**fill_func_prt) ){
     dictionary_t *  opcodesMap = NULL; //SE DESTRUYE AL FINAL DE LA FUNCION Y SE DECLARA SIEMPRE
 
     if (opcodesMap == NULL){ 
-        puts("crea dict");
         opcodesMap = dictionary_create(NULL);
         // chequear los numeros extended
-         dictionary_put(opcodesMap, "10101011001", &addsExtendedReg); //ya con el 1 de sf agregado 
+         dictionary_put(opcodesMap, "10101011000", &addsExtendedReg); //ya con el 1 de sf agregado 
         dictionary_put(opcodesMap, "10110001", &addsImm); // pag. 531
-        dictionary_put(opcodesMap, "1101011001", &subsExtendedReg); // 
+        dictionary_put(opcodesMap, "11101011000", &subsExtendedReg); // 
         dictionary_put(opcodesMap, "11110001", &subsImm); // pag. 936
         dictionary_put(opcodesMap, "11010100", &HLT); // 
         // dictionary_put(opcodesMap, "", &compExtendedReg); // 
@@ -98,19 +99,22 @@ char *  decode(void (**fill_func_prt) ){
 
         // dictionary_put(opcodesMap, "", &AddExtendedReg); // ya con el 1 de sf agregaB
         // dictionary_put(opcodesMap, "", &AddImm); // ya con el 1 de sf agregaB
-        // dictionary_put(opcodesMap, "", &Mul); // ya con el 1 de sf agregaB
-        // dictionary_put(opcodesMap, "", &Cbz); // ya con el 1 de sf agregaB
+         dictionary_put(opcodesMap, "10011011000", &mul); // ya con el 1 de sf agregaB
+         dictionary_put(opcodesMap, "10110100", &Cbz); // ya con el 1 de sf agregaB
         // dictionary_put(opcodesMap, "", &Cbnz); // ya con el 1 de sf agregaB
+        puts("crea dict");
+
     } 
     
     char * pcContentAsString = toBinaryString(mem_read_32(CURRENT_STATE.PC));
     //printf(" pcContentAsString %s", pcContentAsString );
+    puts("lee pc");
     int opcodeSize;
-    for (int i = 0;i<sizeof(opLengths)/ sizeof(int);i++){
+    for (int i = 0;i<sizeof(opLengths)/ sizeof(opLengths[0]);i++){
         char * opCodeString = malloc(sizeof(char) * (opLengths[i]));
         strncpy(opCodeString, pcContentAsString , opLengths[i]);
         printf("opcode string %s", opCodeString);
-
+        puts("flush dns");
         if (dictionary_contains(opcodesMap, opCodeString)){
             *fill_func_prt = dictionary_get(opcodesMap,opCodeString, NULL);
             puts("Eso");
@@ -121,6 +125,7 @@ char *  decode(void (**fill_func_prt) ){
         free(opCodeString);
     }
     char * restOfInstruction = malloc(sizeof(char) * (32- opcodeSize));
+    printf("opcodesize %i \n",opcodeSize);
     strncpy(restOfInstruction, pcContentAsString+opcodeSize , 32- opcodeSize);
 
     free(pcContentAsString);
@@ -137,8 +142,10 @@ void process_instruction(){
     }
     else{
         (*func_ptr)(instructionParams);
+        //free(instructionParams);
         //Execute
     }
+    
     //printf("printing PC %b " ,mem_read_32(CURRENT_STATE.PC));
     /* execute one instruction here. You should use CURRENT_STATE and modify
      * values in NEXT_STATE. You can call mem_read_32() and mem_write_32() to

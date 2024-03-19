@@ -5,4 +5,4 @@ sim: shell.c sim.c
 
 .PHONY: clean
 clean:
-	rm -rf *.o *~ sim
+	rm -rf *.o *~ sim 
