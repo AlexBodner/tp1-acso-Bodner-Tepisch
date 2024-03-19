@@ -16,3 +16,4 @@ void Blt(char * restOfInstruction);
 void Bge(char * restOfInstruction);
 void Ble(char * restOfInstruction);
 void Cbz(char * restOfInstruction);
+void Cbnz(char * restOfInstruction);

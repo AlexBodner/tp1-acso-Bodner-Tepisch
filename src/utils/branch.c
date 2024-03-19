@@ -185,3 +185,29 @@ void Cbz(char * restOfInstruction){
     }
     return ;
 }
+
+void Cbnz(char * restOfInstruction){
+    puts("Cbz");    
+    char * immStr = malloc(sizeof(char) * (19));
+    strncpy(immStr, restOfInstruction, 19);
+    int64_t immNum = strtol(immStr, NULL, 2);
+    immNum = signExtendNto64(immNum,19);
+    free(immStr);
+
+    //guardamos Rm
+    char * RtStr = malloc(sizeof(char) * (5));
+    strncpy(RtStr, restOfInstruction+19, 5);
+    int RtNum= (int) strtol(RtStr, NULL, 2);
+    int64_t rtContent = CURRENT_STATE.REGS[RtNum];
+    free(RtStr);
+    if (rtContent != 00){
+        NEXT_STATE.PC += immNum* 4;
+
+    }   
+    else {
+        // Simplemente avanzar al siguiente conjunto de instrucciones si Z no es 1.
+        NEXT_STATE.PC += 4;
+    }
+    return ;
+}
+
