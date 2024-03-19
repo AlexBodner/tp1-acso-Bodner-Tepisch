@@ -1,4 +1,5 @@
 #include "shift.h"
+
 void LslImm(char * restOfInstruction){
     puts("LslImm");
     //bit 22 es N 

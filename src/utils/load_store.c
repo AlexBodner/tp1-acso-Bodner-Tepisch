@@ -1,8 +1,7 @@
 #include "load_store.h"
 
 
-void Stur(char 
-* restOfInstruction){
+void Stur(char * restOfInstruction){
     puts("Stur");
     //bit 22 es N 
     //imm del 20 al 12 inclusives 
@@ -44,12 +43,11 @@ void Stur(char
     mem_write_32(effectiveAddress, data);
 
     NEXT_STATE.PC  += 4;
-    printf("Stored 0x%llx at simulated memory address 0x%llx\n", data, effectiveAddress);
+    printf("Stored 0x%lx at simulated memory address 0x%lx\n", data, effectiveAddress);
     return ;
 }
 
-void Sturb(char 
-* restOfInstruction){
+void Sturb(char * restOfInstruction){
     puts("Sturb");
     //bit 22 es N 
     //imm del 20 al 12 inclusives 
@@ -91,12 +89,11 @@ void Sturb(char
     mem_write_32(effectiveAddress, data);
 
     NEXT_STATE.PC  += 4;
-    printf("Stored byte 0x%02x at simulated memory address 0x%llx\n", data, effectiveAddress);
+    printf("Stored byte 0x%02x at simulated memory address 0x%lx\n", data, effectiveAddress);
     return ;
 }
 
-void Sturh(char 
-* restOfInstruction){
+void Sturh(char * restOfInstruction){
     puts("Sturh");
     //bit 22 es N 
     //imm del 20 al 12 inclusives 
@@ -138,12 +135,11 @@ void Sturh(char
     mem_write_32(effectiveAddress, data);
 
     NEXT_STATE.PC  += 4;
-    printf("Stored byte 0x%02x at simulated memory address 0x%llx\n", data, effectiveAddress);
+    printf("Stored byte 0x%02x at simulated memory address 0x%lx\n", data, effectiveAddress);
     return ;
 }
 
-void Ldur(char 
-* restOfInstruction){
+void Ldur(char * restOfInstruction){
     puts("Ldur");
     //bit 22 es N 
     //imm del 20 al 12 inclusives 
@@ -184,12 +180,11 @@ void Ldur(char
     NEXT_STATE.REGS[RtNum] = data;
 
     NEXT_STATE.PC  += 4;
-    printf("Loaded 0x%llx into X%d from simulated memory address 0x%llx\n", data, RtNum, effectiveAddress);
+    printf("Loaded 0x%lx into X%d from simulated memory address 0x%lx\n", data, RtNum, effectiveAddress);
     return ;
 }
 
-void Ldurb(char 
-* restOfInstruction){
+void Ldurb(char * restOfInstruction){
     puts("Ldurb");
     //bit 22 es N 
     //imm del 20 al 12 inclusives 
@@ -230,12 +225,12 @@ void Ldurb(char
     NEXT_STATE.REGS[RnNum] = byteData; 
 
     NEXT_STATE.PC  += 4;
-    printf("Loaded byte 0x%02x into W%d from simulated memory address 0x%llx\n", byteData, RnNum, effectiveAddress);
+    printf("Loaded byte 0x%02x into W%d from simulated memory address 0x%lx\n", byteData, RnNum, effectiveAddress);
     return ;
 }
 
-void Ldurh(char 
-* restOfInstruction){
+
+void Ldurh(char * restOfInstruction){
     puts("Ldurh");
     //bit 22 es N 
     //imm del 20 al 12 inclusives 
@@ -278,6 +273,6 @@ void Ldurh(char
 
 
     NEXT_STATE.PC  += 4;
-    printf("Loaded half-data 0x%04x into W%d from simulated memory address 0x%llx\n", halfdata, RnNum, effectiveAddress);
+    printf("Loaded half-data 0x%04x into W%d from simulated memory address 0x%lx\n", halfdata, RnNum, effectiveAddress);
     return ;
 }
