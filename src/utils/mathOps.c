@@ -135,16 +135,9 @@ void addsImm(char * restOfInstruction){
     char * shiftBytes = malloc(sizeof(char) * (2));
     strncpy(shiftBytes, restOfInstruction , 2);
     int shiftStatus = strcmp(shiftBytes,"01");
-    int shiftStatus2 = strcmp(shiftBytes,"00");
     if (shiftStatus ==0){
         //hacemos shift 12 a la izq
         immNum = immNum << 12;
-    }
-    else if(shiftStatus2 ==0){
-        //hacemos sin shift
-    } 
-    else{
-        //no hacer nada porque no es la instruccion adecuada? preguntar
     }
 
     //guardamos Rn
@@ -230,16 +223,9 @@ void subsImm(char * restOfInstruction){
     char * shiftBytes = malloc(sizeof(char) * (2));
     strncpy(shiftBytes, restOfInstruction , 2);
     int shiftStatus = strcmp(shiftBytes,"01");
-    int shiftStatus2 = strcmp(shiftBytes,"00");
     if (shiftStatus ==0){
         //hacemos shift 12 a la izq
         immNum = immNum << 12;
-    }
-    else if(shiftStatus2 ==0){
-        //hacemos sin shift
-    } 
-    else{
-        //no hacer nada porque no es la instruccion adecuada? preguntar
     }
 
     //guardamos Rn
@@ -279,17 +265,11 @@ void subImmediate(char * restOfInstruction){
     char * shiftBytes = malloc(sizeof(char) * (2));
     strncpy(shiftBytes, restOfInstruction , 2);
     int shiftStatus = strcmp(shiftBytes,"01");
-    int shiftStatus2 = strcmp(shiftBytes,"00");
     if (shiftStatus ==0){
         //hacemos shift 12 a la izq
         immNum = immNum << 12;
     }
-    else if(shiftStatus2 ==0){
-        //hacemos sin shift
-    } 
-    else{
-        //no hacer nada porque no es la instruccion adecuada? preguntar
-    }
+
 
     //guardamos Rn
     char * RnStr = malloc(sizeof(char) * (5));

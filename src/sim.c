@@ -4,7 +4,7 @@
 #include "shell.h"
 #include "HashMap/HashMap.h"
 
-// #include "utils/branch.h"
+ //#include "utils/branch.h"
 // #include "utils/load_store.h"
 // #include "utils/mathOps.h"
 // #include "utils/shift.h"
@@ -17,7 +17,14 @@ void HLT(char * restOfInstruction){
     NEXT_STATE.PC+= 4;
     return ;
 }
-
+int64_t signExtendNto64(int64_t value,int n) {
+    // Verificar si el bit n-1 (el bit más significativo de imm26) está establecido
+    if (value & (1 << (n-1))) {
+        // Extender el signo
+        value |= (-1L << 64-n);
+    }
+    return value;
+}
 void addsExtendedReg(char * restOfInstruction){
     puts("addsExtendedReg");
     //ADDS Xn + Xm to Xd
@@ -97,7 +104,7 @@ void addsImm(char * restOfInstruction){
     int RdNum= (int) strtol(RdStr, NULL, 2);
 
     //Hacemos la operacion
-    int result = rnContent + immNum;
+    int64_t result = rnContent + immNum;
     printf("Rd %i\n", RdNum);
     NEXT_STATE.FLAG_N = (result < 0);  // Si result es menor que 0, FLAG_N se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
     NEXT_STATE.FLAG_Z = (result == 0); // Si result es igual a 0, FLAG_Z se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
@@ -135,7 +142,7 @@ void subs_compExtendedReg(char * restOfInstruction){
     int RdNum= (int) strtol(RdStr, NULL, 2);
 
     //Hacemos la operacion
-    int result =   rnContent-rmContent;
+    int64_t result =   rnContent-rmContent;
     printf("Rd %i\n", RdNum);
     NEXT_STATE.FLAG_N = (result < 0);  // Si result es menor que 0, FLAG_N se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
     NEXT_STATE.FLAG_Z = (result == 0); // Si result es igual a 0, FLAG_Z se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
@@ -169,29 +176,23 @@ void subs_compImm(char * restOfInstruction){
     // guardamos el inmediato 
     char * immStr = malloc(sizeof(char) * (12));
     strncpy(immStr, restOfInstruction+2 , 12);
-    int immNum= (int) strtol(immStr, NULL, 2);
+    int64_t immNum= (int64_t) strtol(immStr, NULL, 2);
 
 
     char * shiftBytes = malloc(sizeof(char) * (2));
     strncpy(shiftBytes, restOfInstruction , 2);
     int shiftStatus = strcmp(shiftBytes,"01");
-    int shiftStatus2 = strcmp(shiftBytes,"00");
     if (shiftStatus ==0){
         //hacemos shift 12 a la izq
         immNum = immNum << 12;
     }
-    else if(shiftStatus2 ==0){
-        //hacemos sin shift
-    } 
-    else{
-        //no hacer nada porque no es la instruccion adecuada? preguntar
-    }
+
 
     //guardamos Rn
     char * RnStr = malloc(sizeof(char) * (5));
     strncpy(RnStr, restOfInstruction+14 , 5);
     int RnNum= (int) strtol(RnStr, NULL, 2);
-    int rnContent = CURRENT_STATE.REGS[RnNum];
+    int64_t rnContent = CURRENT_STATE.REGS[RnNum];
 
     //guardamos Rd
     char * RdStr = malloc(sizeof(char) * (5));
@@ -201,7 +202,7 @@ void subs_compImm(char * restOfInstruction){
     
 
     //Hacemos la operacion
-    int result = rnContent - immNum;
+    int64_t result = rnContent - immNum;
     printf("Resultado de rest %i \n", result);
     NEXT_STATE.FLAG_N = (result < 0);  // Si result es menor que 0, FLAG_N se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
     NEXT_STATE.FLAG_Z = (result == 0); // Si result es igual a 0, FLAG_Z se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
@@ -228,23 +229,17 @@ void compImm(char * restOfInstruction){
     //CMP Xn - imm 
     char * immStr = malloc(sizeof(char) * (12));
     strncpy(immStr, restOfInstruction+2 , 12);
-    int immNum= (int) strtol(immStr, NULL, 2);
+    int64_t immNum= (int64_t) strtol(immStr, NULL, 2);
 
 
     char * shiftBytes = malloc(sizeof(char) * (2));
     strncpy(shiftBytes, restOfInstruction , 2);
     int shiftStatus = strcmp(shiftBytes,"01");
-    int shiftStatus2 = strcmp(shiftBytes,"00");
     if (shiftStatus ==0){
         //hacemos shift 12 a la izq
         immNum = immNum << 12;
     }
-    else if(shiftStatus2 ==0){
-        //hacemos sin shift
-    } 
-    else{
-        //no hacer nada porque no es la instruccion adecuada? preguntar
-    }
+
 
     //guardamos Rn
     char * RnStr = malloc(sizeof(char) * (5));
@@ -260,7 +255,7 @@ void compImm(char * restOfInstruction){
 
 
     //Hacemos la operacion
-    int result = rnContent - immNum;
+    int64_t result = rnContent - immNum;
     printf("Resultado de rest %i \n", result);
     NEXT_STATE.FLAG_N = (result < 0);  // Si result es menor que 0, FLAG_N se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
     NEXT_STATE.FLAG_Z = (result == 0); // Si result es igual a 0, FLAG_Z se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
