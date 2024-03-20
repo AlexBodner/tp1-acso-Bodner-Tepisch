@@ -37,8 +37,8 @@ void Stur(char * restOfInstruction){
 
     // Realizamos la operación de desplazamiento lógico a la derecha
     // uint64_t result = rnContent >> shiftAmount;
-    uint32_t rtr = rnContent & 0xFFFFFFFF;
-    uint32_t rtl = (rnContent >> 32) & 0xFFFFFFFF;
+    uint32_t rtr = rtContent & 0xFFFFFFFF;
+    uint32_t rtl = (rtContent >> 32) & 0xFFFFFFFF;
     mem_write_32((rnContent+immNum), rtr);
     mem_write_32((rnContent+immNum+4), rtl);
 
