@@ -59,8 +59,8 @@ void Sturb(char * restOfInstruction){
     strncpy(immStr, restOfInstruction, 9);
     int immNum = (int) strtol(immStr, NULL, 2);
 
-    if ((immNum & (1 << 8)) != 0) { // Comprobar si el bit más significativo está activado para extensión de signo
-        immNum |= ~((1 << 9) - 1); // Extensión de signo para un valor de 9 bits
+    if (immNum & (1 << 8)) { // Si el noveno bit es 1, extendemos el signo
+        immNum |= ~((1 << 8) - 1);
     }
     free(immStr);
 
@@ -79,10 +79,13 @@ void Sturb(char * restOfInstruction){
     free(RtStr);
 
     // Se escribe solamente el byte menos significativo usando mem_write_32
-    uint8_t rtByte = rtContent & 0xFFFFFFFF;
+    uint32_t rtByte = rtContent & 0xFF;
+
+    uint32_t previousData = mem_read_32(rnContent + immNum)&0b11111111111111111111111100000000;
+    
     // Asumimos que mem_write_32 escribe los 32 bits, pero los bits superiores no se deben modificar.
     // Dado que solo queremos escribir un byte, los otros deben ser 0.
-    mem_write_32((rnContent + immNum), rtByte);
+    mem_write_32((rnContent + immNum), rtByte+previousData);
 
     NEXT_STATE.PC += 4;
     printf("Stored byte 0x%02x at simulated memory address 0x%lx\n", rtByte, (rnContent + immNum));
@@ -168,8 +171,8 @@ void Ldur(char * restOfInstruction){
 
     uint64_t effectiveAddress = baseAddress + offset;
 
-    uint64_t dataLessSignificative = mem_read_32(effectiveAddress);
-    uint64_t dataMostSignificative = mem_read_32(effectiveAddress+4)<<32;
+    int64_t dataLessSignificative = mem_read_32(effectiveAddress);
+    int64_t dataMostSignificative = ((int64_t)mem_read_32(effectiveAddress+4))<<32;
 
     NEXT_STATE.REGS[RtNum] = dataLessSignificative + dataMostSignificative ;
 
@@ -213,13 +216,13 @@ void Ldurb(char * restOfInstruction){
 
     free(RtStr);
 
-    uint64_t effectiveAddress = baseAddress + offset- 0x10000000;
+    uint64_t effectiveAddress = baseAddress + offset;
 
-    uint8_t byteData = mem_read_32(effectiveAddress);
-    NEXT_STATE.REGS[RnNum] = byteData; 
+    int64_t dataLessSignificative = mem_read_32(effectiveAddress)&0xFF;
+
+    NEXT_STATE.REGS[RtNum] = dataLessSignificative;
 
     NEXT_STATE.PC  += 4;
-    printf("Loaded byte 0x%02x into W%d from simulated memory address 0x%lx\n", byteData, RnNum, effectiveAddress);
     return ;
 }
 
@@ -259,14 +262,12 @@ void Ldurh(char * restOfInstruction){
 
     free(RtStr);
 
-    uint64_t effectiveAddress = baseAddress + offset- 0x10000000;
+    uint64_t effectiveAddress = baseAddress + offset;
 
-    uint16_t halfdata = mem_read_32(effectiveAddress);
-    NEXT_STATE.REGS[RnNum] &= 0xFFFFFFFFFFFF0000; // Limpia los 16 bits inferiores
-    NEXT_STATE.REGS[RnNum] |= halfdata; // Carga el half-data en los 16 bits inferiores
+    int64_t dataLessSignificative = mem_read_32(effectiveAddress)&0xFFFF;
 
+    NEXT_STATE.REGS[RtNum] = dataLessSignificative;
 
     NEXT_STATE.PC  += 4;
-    printf("Loaded half-data 0x%04x into W%d from simulated memory address 0x%lx\n", halfdata, RnNum, effectiveAddress);
     return ;
 }

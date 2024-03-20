@@ -22,6 +22,8 @@ void HLT(char * restOfInstruction){
 
 
 
+
+
 void Movz(char * restOfInstruction) {
     puts("Movz");
 
