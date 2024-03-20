@@ -24,7 +24,6 @@ void addsExtendedReg(char * restOfInstruction){
     //Hacemos la operacion
 
     int64_t result = rnContent + rmContent;
-    printf("Rd %i\n", RdNum);
     NEXT_STATE.FLAG_N = (result < 0);  // Si result es menor que 0, FLAG_N se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
     NEXT_STATE.FLAG_Z = (result == 0); // Si result es igual a 0, FLAG_Z se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
 
@@ -42,7 +41,6 @@ void addsExtendedReg(char * restOfInstruction){
 
 
 void addsImm(char * restOfInstruction){
-    puts("addsImm");
     //ADDS Xn + imm to Xd
 
 
@@ -79,7 +77,6 @@ void addsImm(char * restOfInstruction){
 
     //Hacemos la operacion
     int64_t result = rnContent + immNum;
-    printf("Rd %i\n", RdNum);
     NEXT_STATE.FLAG_N = (result < 0);  // Si result es menor que 0, FLAG_N se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
     NEXT_STATE.FLAG_Z = (result == 0); // Si result es igual a 0, FLAG_Z se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
 
@@ -87,7 +84,6 @@ void addsImm(char * restOfInstruction){
     if (RdNum!=31){
         NEXT_STATE.REGS[RdNum]  = result;
     }
-    printf("Result %i\n", result);
     NEXT_STATE.PC+= 4;
     free(shiftBytes);
     free(immStr);
@@ -98,7 +94,6 @@ void addsImm(char * restOfInstruction){
 
 
 void subs_compExtendedReg(char * restOfInstruction){
-    puts("subs_compExtendedReg");
         //guardamos Rm
     char * RmStr = malloc(sizeof(char) * (5));
     strncpy(RmStr, restOfInstruction, 5);
@@ -119,7 +114,6 @@ void subs_compExtendedReg(char * restOfInstruction){
 
     //Hacemos la operacion
     int64_t result =   rnContent-rmContent;
-    printf("Rd %i\n", RdNum);
     NEXT_STATE.FLAG_N = (result < 0);  // Si result es menor que 0, FLAG_N se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
     NEXT_STATE.FLAG_Z = (result == 0); // Si result es igual a 0, FLAG_Z se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
     
@@ -139,7 +133,6 @@ void subs_compExtendedReg(char * restOfInstruction){
 
 void subs_compImm(char * restOfInstruction){
     // Revisar como se guarda la resta
-    puts("subs_compImm");
     
     //ADDS Xn - imm to Xd
     //bits 23 y 22 son de shift y deberian ser 00 
@@ -176,18 +169,14 @@ void subs_compImm(char * restOfInstruction){
 
     //Hacemos la operacion
     int64_t result = rnContent - immNum;
-    printf("Resultado de rest %i \n", result);
     NEXT_STATE.FLAG_N = (result < 0);  // Si result es menor que 0, FLAG_N se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
     NEXT_STATE.FLAG_Z = (result == 0); // Si result es igual a 0, FLAG_Z se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
 
     if (RdNum == 31){
-        puts("cmpImm");
         NEXT_STATE.PC+= 4;
     }
     else{
-        puts("subsImm");
         NEXT_STATE.REGS[RdNum]  = result;
-        printf("Result %i\n", result);
         NEXT_STATE.PC+= 4;
     }
     free(immStr);
@@ -198,7 +187,6 @@ void subs_compImm(char * restOfInstruction){
 }
 
 void AndsShiftedReg(char * restOfInstruction){
-    puts("AndsShiftedReg");    
     //ADDS Xn & imm to Xd
     //bits 23 y 22 son de shift y deberian ser 00 
     //N es 0 en 21
@@ -234,7 +222,6 @@ void AndsShiftedReg(char * restOfInstruction){
     NEXT_STATE.FLAG_N = ((results>>63) & 1);  // Si result es menor que 0, FLAG_N se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
     NEXT_STATE.FLAG_Z = (results == 0); // Si result es igual a 0, FLAG_Z se establece a 1 (verdadero), de lo contrario se establece a 0 (falso)
 
-    printf("Result %lu\n", results);
     NEXT_STATE.PC+= 4;
     free(RmStr);
     free(immStr);
@@ -245,7 +232,6 @@ void AndsShiftedReg(char * restOfInstruction){
 
 
 void EorShiftedReg(char * restOfInstruction){
-    puts("EorShiftedReg");    
     //ADDS Xn & imm to Xd
     //bits 23 y 22 son de shift y deberian ser 00
     //N es 0 en 21
@@ -285,12 +271,10 @@ void EorShiftedReg(char * restOfInstruction){
     int RdNum= (int) strtol(RdStr, NULL, 2);
 
     if (shiftStatusLSL ==0){
-        puts("LSL");
         //hacemos shift izq
         rnContent << RmContent;
     }
     else if(shiftStatusLSR ==0){
-        puts("LSR");
         //hacemos shift der
         rnContent >> RmContent;
     } 
@@ -306,7 +290,6 @@ void EorShiftedReg(char * restOfInstruction){
         NEXT_STATE.REGS[RdNum]  = result;
     }
 
-    printf("Result %lu\n", result);
     NEXT_STATE.PC+= 4;
     free(RmStr);
     free(immStr);
@@ -317,7 +300,6 @@ void EorShiftedReg(char * restOfInstruction){
 }
 
 void OrrShiftedReg(char * restOfInstruction){
-    puts("OrrShiftedReg");    
     //ADDS Xn & imm to Xd
     //bits 23 y 22 son de shift y deberian ser 00
     //N es 0 en 21
@@ -348,7 +330,6 @@ void OrrShiftedReg(char * restOfInstruction){
     if (RdNum!=31){
         NEXT_STATE.REGS[RdNum]  = result;
     }
-    printf("Result %i\n", result);
     NEXT_STATE.PC+= 4;
     free(RmStr);
     free(RnStr);
@@ -359,7 +340,6 @@ void OrrShiftedReg(char * restOfInstruction){
 // ----------------------EXTRAS----------------------
 
 void subImmediate(char * restOfInstruction){
-     puts("subImm");
      char * immStr = malloc(sizeof(char) * (12));
     strncpy(immStr, restOfInstruction+2 , 12);
     int64_t immNum= (int64_t) strtol(immStr, NULL, 2);
@@ -400,7 +380,6 @@ void subImmediate(char * restOfInstruction){
 }
 
 void subExtendedReg(char * restOfInstruction){
-    puts("subExtendedReg");
 
     char * RmStr = malloc(sizeof(char) * (5));
     strncpy(RmStr, restOfInstruction, 5);
@@ -434,7 +413,6 @@ void subExtendedReg(char * restOfInstruction){
     }
 
 void AddImmediate(char * restOfInstruction){
-     puts("addsImm");
 
     char * immStr = malloc(sizeof(char) * (12));
     strncpy(immStr, restOfInstruction+2 , 12);
@@ -464,7 +442,6 @@ void AddImmediate(char * restOfInstruction){
     if (RdNum!=31){
         NEXT_STATE.REGS[RdNum]  = result;
     }
-    printf("Result %i\n", result);
     NEXT_STATE.PC+= 4;
     free(shiftBytes);
     free(immStr);
@@ -474,7 +451,6 @@ void AddImmediate(char * restOfInstruction){
 }
 
 void AddExtendedReg(char * restOfInstruction){
-    puts("addExtendedReg");
     //ADDS Xn + Xm to Xd
 
     //guardamos Rm
@@ -501,7 +477,6 @@ void AddExtendedReg(char * restOfInstruction){
    if (RdNum!=31){
         NEXT_STATE.REGS[RdNum]  = result;
     }
-    printf("Result %i\n", result);
     NEXT_STATE.PC+= 4;
     free(RmStr);
     free(RnStr);

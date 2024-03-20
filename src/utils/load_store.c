@@ -2,7 +2,6 @@
 
 
 void Stur(char * restOfInstruction){
-    puts("Stur");
     //bit 22 es N 
     //imm del 20 al 12 inclusives 
     //00 del 11 al 10 
@@ -43,12 +42,10 @@ void Stur(char * restOfInstruction){
     mem_write_32((rnContent+immNum+4), rtl);
 
     NEXT_STATE.PC  += 4;
-    printf("Stored 0x%lx at simulated memory address 0x%lx\n", rtr, rtl);
     return ;
 }
 
 void Sturb(char * restOfInstruction){
-    puts("Sturb");
     // bit 22 es N 
     // imm del 20 al 12 inclusives 
     // 00 del 11 al 10 
@@ -88,12 +85,10 @@ void Sturb(char * restOfInstruction){
     mem_write_32((rnContent + immNum), rtByte+previousData);
 
     NEXT_STATE.PC += 4;
-    printf("Stored byte 0x%02x at simulated memory address 0x%lx\n", rtByte, (rnContent + immNum));
     return ;
 }
 
 void Sturh(char * restOfInstruction){
-    puts("Sturh");
     //bit 22 es N 
     //imm del 20 al 12 inclusives 
     //00 del 11 al 10 
@@ -131,13 +126,11 @@ void Sturh(char * restOfInstruction){
     mem_write_32((rnContent + immNum), rtByte);
 
     NEXT_STATE.PC += 4;
-    printf("Stored byte 0x%02x at simulated memory address 0x%lx\n", rtByte, (rnContent + immNum));
     return ;
 }
 
 
 void Ldur(char * restOfInstruction){
-    puts("Ldur");
     //bit 22 es N 
     //imm del 20 al 12 inclusives 
     //00 del 11 al 10 
@@ -177,12 +170,10 @@ void Ldur(char * restOfInstruction){
     NEXT_STATE.REGS[RtNum] = dataLessSignificative + dataMostSignificative ;
 
     NEXT_STATE.PC  += 4;
-    //printf("Loaded 0x%lx into X%d from simulated memory address 0x%lx\n", data, RtNum, effectiveAddress);
     return ;
 }
 
 void Ldurb(char * restOfInstruction){
-    puts("Ldurb");
     //bit 22 es N 
     //imm del 20 al 12 inclusives 
     //00 del 11 al 10 
@@ -228,7 +219,6 @@ void Ldurb(char * restOfInstruction){
 
 
 void Ldurh(char * restOfInstruction){
-    puts("Ldurh");
     //bit 22 es N 
     //imm del 20 al 12 inclusives 
     //00 del 11 al 10 

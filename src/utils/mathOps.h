@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
+#include <stdlib.h>
 
 void addsExtendedReg(char * restOfInstruction);
 void addsImm(char * restOfInstruction);

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <stdlib.h>
 #include "shell.h"
 #include "HashMap/HashMap.h"
 
@@ -13,7 +14,6 @@
 int opLengths[] ={0,4+1, 5+1, 6+1,7+1,8+1,9+1,10+1,11+1,23} ;
 
 void HLT(char * restOfInstruction){
-    puts("hlt");
     RUN_BIT = 0;
     NEXT_STATE.PC+= 4;
     return ;
@@ -25,7 +25,6 @@ void HLT(char * restOfInstruction){
 
 
 void Movz(char * restOfInstruction) {
-    puts("Movz");
 
     // Extraer el valor inmediato del resto de la instrucción
     // Asumiremos que el valor inmediato viene en los últimos 16 bits de la instrucción
@@ -46,7 +45,6 @@ void Movz(char * restOfInstruction) {
     // Actualizar el PC al siguiente valor
     NEXT_STATE.PC += 4;
 
-    printf("Moved value 0x%04x into X%d\n", immediateValue, RtNum);
 }
 
 
@@ -75,50 +73,41 @@ char *  decode(void (**fill_func_prt) ){
         opcodesMap = dictionary_create(NULL);
         // chequear los numeros extended
          dictionary_put(opcodesMap, "10101011000", &addsExtendedReg); //ya con el 1 de sf agregado 
-        dictionary_put(opcodesMap, "10110001", &addsImm); // pag. 531
-        dictionary_put(opcodesMap, "11101011000", &subs_compExtendedReg); // pag. 934
-        dictionary_put(opcodesMap, "11110001", &subs_compImm); // pag. 936
-        dictionary_put(opcodesMap, "11010100", &HLT); // 
-        dictionary_put(opcodesMap, "11101010", &AndsShiftedReg); // pag.542 - Que hago con el 1 de N? - no se usa el inmediato?
-        dictionary_put(opcodesMap, "11001010", &EorShiftedReg); // pag. 620 - Aca no se updatean las flags?
-        dictionary_put(opcodesMap, "10101010", &OrrShiftedReg); // 
-        dictionary_put(opcodesMap, "000101", &B); // pag. 550 - Nose si esta bien
-        // dictionary_put(opcodesMap, "", &Imm26); // Nose si esta explicando el caso anterior o es uno nuevo
-        dictionary_put(opcodesMap, "1101011000111111000000", &Br); // pag. 562 - Revisar: llamado de funcion y NEXT_STATE.PC = CURRENT_STATE.REGS[RnNum];
-        dictionary_put(opcodesMap, "01010100", &Bcond); // pag. 549
-        dictionary_put(opcodesMap, "110100110", &LsImm); // pag. 754 Revisar: shiftAmount
-        dictionary_put(opcodesMap, "11111000000", &Stur); // pag. 917 Revisar: offset
-        dictionary_put(opcodesMap, "00111000000", &Sturb); // pag. 918
-        dictionary_put(opcodesMap, "01111000000", &Sturh); // pag. 919
-        dictionary_put(opcodesMap, "11111000010", &Ldur); // pag. 739
-        dictionary_put(opcodesMap, "00111000010", &Ldurb); // pag. 741
-        dictionary_put(opcodesMap, "01111000010", &Ldurh); // pag. 742
-        dictionary_put(opcodesMap, "110100101", &Movz); // pag. 770
-
+        dictionary_put(opcodesMap, "10110001", &addsImm); 
+        dictionary_put(opcodesMap, "11101011000", &subs_compExtendedReg); 
+        dictionary_put(opcodesMap, "11110001", &subs_compImm); 
+        dictionary_put(opcodesMap, "11010100", &HLT);  
+        dictionary_put(opcodesMap, "11101010", &AndsShiftedReg); 
+        dictionary_put(opcodesMap, "11001010", &EorShiftedReg); 
+        dictionary_put(opcodesMap, "10101010", &OrrShiftedReg); 
+        dictionary_put(opcodesMap, "000101", &B); 
+        dictionary_put(opcodesMap, "1101011000111111000000", &Br); 
+        dictionary_put(opcodesMap, "01010100", &Bcond); 
+        dictionary_put(opcodesMap, "110100110", &LsImm); 
+        dictionary_put(opcodesMap, "11111000000", &Stur);
+        dictionary_put(opcodesMap, "00111000000", &Sturb); 
+        dictionary_put(opcodesMap, "01111000000", &Sturh); 
+        dictionary_put(opcodesMap, "11111000010", &Ldur);
+        dictionary_put(opcodesMap, "00111000010", &Ldurb); 
+        dictionary_put(opcodesMap, "01111000010", &Ldurh); 
+        dictionary_put(opcodesMap, "110100101", &Movz); 
 
         // -----------------------si queremos puntos extras----------------------
 
-        dictionary_put(opcodesMap, "10001011000", &AddExtendedReg); // ya con el 1 de sf agregaB
-        dictionary_put(opcodesMap, "10010001", &AddImmediate); // ya con el 1 de sf agregaB
-        dictionary_put(opcodesMap, "10011011000", &mul); // ya con el 1 de sf agregaB
-        dictionary_put(opcodesMap, "10110100", &Cbz); // ya con el 1 de sf agregaB
-        dictionary_put(opcodesMap, "10110101", &Cbnz); // ya con el 1 de sf agregaB
-        puts("crea dict");
-
+        dictionary_put(opcodesMap, "10001011000", &AddExtendedReg); 
+        dictionary_put(opcodesMap, "10010001", &AddImmediate); 
+        dictionary_put(opcodesMap, "10011011000", &mul); 
+        dictionary_put(opcodesMap, "10110100", &Cbz); 
+        dictionary_put(opcodesMap, "10110101", &Cbnz); 
     } 
     
     char * pcContentAsString = toBinaryString(mem_read_32(CURRENT_STATE.PC));
-    //printf(" pcContentAsString %s", pcContentAsString );
-    puts("lee pc");
     int opcodeSize;
     for (int i = 0;i<sizeof(opLengths)/ sizeof(opLengths[0]);i++){
         char * opCodeString = malloc(sizeof(char) * (opLengths[i]));
         strncpy(opCodeString, pcContentAsString , opLengths[i]);
-        printf("opcode string %s\n", opCodeString);
-        puts("flush dns");
         if (dictionary_contains(opcodesMap, opCodeString)){
             *fill_func_prt = dictionary_get(opcodesMap,opCodeString, NULL);
-            puts("Eso");
             opcodeSize =  opLengths[i];
             free(opCodeString);
             break;
@@ -126,7 +115,6 @@ char *  decode(void (**fill_func_prt) ){
         free(opCodeString);
     }
     char * restOfInstruction = malloc(sizeof(char) * (32- opcodeSize));
-    printf("opcodesize %i \n",opcodeSize);
     strncpy(restOfInstruction, pcContentAsString+opcodeSize , 32- opcodeSize);
 
     free(pcContentAsString);
@@ -139,12 +127,10 @@ void process_instruction(){
     char * instructionParams = decode(&func_ptr );
     if (func_ptr == NULL){
         puts("no se encontro");
-        //la instruccion no fue encontrada
     }
     else{
         (*func_ptr)(instructionParams);
         free(instructionParams);
-        //Execute
     }
     
 }
