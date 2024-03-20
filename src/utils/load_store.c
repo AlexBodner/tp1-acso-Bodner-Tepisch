@@ -24,14 +24,14 @@ void Stur(char * restOfInstruction){
     char * RnStr = malloc(5);
     strncpy(RnStr, restOfInstruction + 9+2, 5);
     int RnNum = (int) strtol(RnStr, NULL, 2);
-    uint32_t rnContent = CURRENT_STATE.REGS[RnNum];
+    uint64_t rnContent = CURRENT_STATE.REGS[RnNum];
     free(RnStr);
     
     // extraemos Rt, el índice del registro destino
     char * RtStr = malloc(5);
     strncpy(RtStr, restOfInstruction + 16, 5);
     int RtNum = (int) strtol(RtStr, NULL, 2);
-    uint32_t rtContent = CURRENT_STATE.REGS[RtNum];
+    uint64_t rtContent = CURRENT_STATE.REGS[RtNum];
 
     free(RtStr);
 
