@@ -81,8 +81,8 @@ char *  decode(void (**fill_func_prt) ){
         // dictionary_put(opcodesMap, "", &Imm26); // Nose si esta explicando el caso anterior o es uno nuevo
         dictionary_put(opcodesMap, "1101011000111111000000", &Br); // pag. 562 - Revisar: llamado de funcion y NEXT_STATE.PC = CURRENT_STATE.REGS[RnNum];
         dictionary_put(opcodesMap, "01010100", &Bcond); // pag. 549
-        // dictionary_put(opcodesMap, "110100110", &LslImm); // pag. 754 Revisar: shiftAmount
-        // dictionary_put(opcodesMap, "110100110", &LsrImm); // pag. 757
+        dictionary_put(opcodesMap, "110100110", &LslImm); // pag. 754 Revisar: shiftAmount
+        dictionary_put(opcodesMap, "110100110", &LsrImm); // pag. 757
         dictionary_put(opcodesMap, "11111000000", &Stur); // pag. 917 Revisar: offset
         dictionary_put(opcodesMap, "00111000000", &Sturb); // pag. 918
         dictionary_put(opcodesMap, "01111000000", &Sturh); // pag. 919

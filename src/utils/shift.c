@@ -42,9 +42,9 @@ void LslImm(char * restOfInstruction){
 
     //Hacemos la operacion
     int result = rnContent << shiftAmount;
-    NEXT_STATE.REGS[RdNum] = result;
-
-    printf("Rd %i\n", RdNum);
+    if (RdNum!=31){
+        NEXT_STATE.REGS[RdNum]  = result;
+    }
 
 
     printf("Result %i\n", result);
@@ -85,7 +85,9 @@ void LsrImm(char * restOfInstruction){
     // Realizamos la operación de desplazamiento lógico a la derecha
     // uint64_t result = rnContent >> shiftAmount;
     int result = rnContent >> shiftAmount;
-    NEXT_STATE.REGS[RdNum] = result;
+    if (RdNum!=31){
+        NEXT_STATE.REGS[RdNum]  = result;
+    }
 
     printf("Rd %i\n", RdNum);
     printf("Result %i\n", result);
