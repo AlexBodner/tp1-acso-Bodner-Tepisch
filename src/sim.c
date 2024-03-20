@@ -93,7 +93,6 @@ char *  decode(void (**fill_func_prt) ){
         dictionary_put(opcodesMap, "110100101", &Movz); // pag. 770
 
 
-
         // -----------------------si queremos puntos extras----------------------
 
         dictionary_put(opcodesMap, "10001011000", &AddExtendedReg); // ya con el 1 de sf agregaB
