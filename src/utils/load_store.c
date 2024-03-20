@@ -156,8 +156,6 @@ void Ldur(char * restOfInstruction){
     }
     free(immStr);
     
-
-
     // Decodificar Rn del 9 al 5
     char * RnStr = malloc(5);
     strncpy(RnStr, restOfInstruction + 11, 5);
@@ -172,13 +170,15 @@ void Ldur(char * restOfInstruction){
 
     free(RtStr);
 
-    uint64_t effectiveAddress = baseAddress + offset- 0x10000000;
+    uint64_t effectiveAddress = baseAddress + offset;
 
-    uint64_t data = mem_read_32(effectiveAddress);
-    NEXT_STATE.REGS[RtNum] = data;
+    uint64_t dataLessSignificative = mem_read_32(effectiveAddress);
+    uint64_t dataMostSignificative = mem_read_32(effectiveAddress+4)<<32;
+
+    NEXT_STATE.REGS[RtNum] = dataLessSignificative + dataMostSignificative ;
 
     NEXT_STATE.PC  += 4;
-    printf("Loaded 0x%lx into X%d from simulated memory address 0x%lx\n", data, RtNum, effectiveAddress);
+    //printf("Loaded 0x%lx into X%d from simulated memory address 0x%lx\n", data, RtNum, effectiveAddress);
     return ;
 }
 
