@@ -11,11 +11,10 @@ void Stur(char * restOfInstruction){
 
     char * immStr = malloc(9); 
     strncpy(immStr, restOfInstruction, 9);
-    int offset = (int) strtol(immStr, NULL, 2);
+    int immNum = (int) strtol(immStr, NULL, 2);
 
-
-    if ((offset & (1 << 8)) != 0) { // Comprobar si el bit más significativo está activado para extensión de signo
-        offset |= ~((1 << 9) - 1); // Extensión de signo para un valor de 9 bits
+    if ((immNum & (1 << 8)) != 0) { // Comprobar si el bit más significativo está activado para extensión de signo
+        immNum |= ~((1 << 9) - 1); // Extensión de signo para un valor de 9 bits
     }
     free(immStr);
     
@@ -23,26 +22,28 @@ void Stur(char * restOfInstruction){
 
     // Decodificar Rn del 9 al 5
     char * RnStr = malloc(5);
-    strncpy(RnStr, restOfInstruction + 11, 5);
+    strncpy(RnStr, restOfInstruction + 9+2, 5);
     int RnNum = (int) strtol(RnStr, NULL, 2);
-    uint64_t baseAddress = CURRENT_STATE.REGS[RnNum];
+    uint32_t rnContent = CURRENT_STATE.REGS[RnNum];
     free(RnStr);
     
     // extraemos Rt, el índice del registro destino
     char * RtStr = malloc(5);
     strncpy(RtStr, restOfInstruction + 16, 5);
     int RtNum = (int) strtol(RtStr, NULL, 2);
-    uint64_t data = CURRENT_STATE.REGS[RtNum];
+    uint32_t rtContent = CURRENT_STATE.REGS[RtNum];
 
     free(RtStr);
 
     // Realizamos la operación de desplazamiento lógico a la derecha
     // uint64_t result = rnContent >> shiftAmount;
-    uint64_t effectiveAddress = baseAddress + offset - 0x10000000;
-    mem_write_32(effectiveAddress, data);
+    uint32_t rtr = rnContent & 0xFFFFFFFF;
+    uint32_t rtl = (rnContent >> 32) & 0xFFFFFFFF;
+    mem_write_32((rnContent+immNum), rtr);
+    mem_write_32((rnContent+immNum+4), rtl);
 
     NEXT_STATE.PC  += 4;
-    printf("Stored 0x%lx at simulated memory address 0x%lx\n", data, effectiveAddress);
+    printf("Stored 0x%lx at simulated memory address 0x%lx\n", rtr, rtl);
     return ;
 }
 
