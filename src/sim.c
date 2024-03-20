@@ -61,86 +61,7 @@ char* toBinaryString(int n) {
   return cadena;
 }
 
-// void Cbz(char * restOfInstruction){
-//     puts("Cbz");    
-//     char * immStr = malloc(sizeof(char) * (19));
-//     strncpy(immStr, restOfInstruction, 19);
-//     int64_t immNum = strtol(immStr, NULL, 2);
-//     immNum = signExtendNto64(immNum,19);
-//     free(immStr);
 
-//     //guardamos Rm
-//     char * RtStr = malloc(sizeof(char) * (5));
-//     strncpy(RtStr, restOfInstruction+19, 5);
-//     int RtNum= (int) strtol(RtStr, NULL, 2);
-//     int64_t rtContent = CURRENT_STATE.REGS[RtNum];
-//     free(RtStr);
-//     if (rtContent == 00){
-//         NEXT_STATE.PC += immNum* 4;
-
-//     }   
-//     else {
-//         // Simplemente avanzar al siguiente conjunto de instrucciones si Z no es 1.
-//         NEXT_STATE.PC += 4;
-//     }
-//     return ;
-// }
-// void mul(char * restOfInstruction){
-//     //ADDS Xn + Xm to Xd
-
-//     //guardamos Rm
-//     char * RmStr = malloc(sizeof(char) * (5));
-//     strncpy(RmStr, restOfInstruction, 5);
-//     int RmNum= (int) strtol(RmStr, NULL, 2);
-//     int64_t rmContent = CURRENT_STATE.REGS[RmNum];
-
-
-//     //guardamos Rn
-//     char * RnStr = malloc(sizeof(char) * (5));
-//     strncpy(RnStr, restOfInstruction+5+6 , 5);
-//     int RnNum= (int) strtol(RnStr, NULL, 2);
-//     int64_t rnContent = CURRENT_STATE.REGS[RnNum];
-
-//     //guardamos Rd
-//     char * RdStr = malloc(sizeof(char) * (5));
-//     strncpy(RdStr, restOfInstruction+5+6+5 , 5);
-//     int RdNum= (int) strtol(RdStr, NULL, 2);
-
-//     //Hacemos la operacion
-//     int64_t result = rnContent * rmContent;
-
-//     NEXT_STATE.REGS[RdNum]  = result;
-//     NEXT_STATE.PC+= 4;
-//     free(RmStr);
-//     free(RnStr);
-//     free(RdStr);
-
-//     return ;
-// }
-// void Cbnz(char * restOfInstruction){
-//     puts("Cbz");    
-//     char * immStr = malloc(sizeof(char) * (19));
-//     strncpy(immStr, restOfInstruction, 19);
-//     int64_t immNum = strtol(immStr, NULL, 2);
-//     immNum = signExtendNto64(immNum,19);
-//     free(immStr);
-
-//     //guardamos Rm
-//     char * RtStr = malloc(sizeof(char) * (5));
-//     strncpy(RtStr, restOfInstruction+19, 5);
-//     int RtNum= (int) strtol(RtStr, NULL, 2);
-//     int64_t rtContent = CURRENT_STATE.REGS[RtNum];
-//     free(RtStr);
-//     if (rtContent != 00){
-//         NEXT_STATE.PC += immNum* 4;
-
-//     }   
-//     else {
-//         // Simplemente avanzar al siguiente conjunto de instrucciones si Z no es 1.
-//         NEXT_STATE.PC += 4;
-//     }
-//     return ;
-// }
 
 char *  decode(void (**fill_func_prt) ){
     dictionary_t *  opcodesMap = NULL; //SE DESTRUYE AL FINAL DE LA FUNCION Y SE DECLARA SIEMPRE
@@ -173,11 +94,11 @@ char *  decode(void (**fill_func_prt) ){
 
         // -----------------------si queremos puntos extras----------------------
 
-        // dictionary_put(opcodesMap, "", &AddExtendedReg); // ya con el 1 de sf agregaB
-        // dictionary_put(opcodesMap, "", &AddImm); // ya con el 1 de sf agregaB
-         dictionary_put(opcodesMap, "10011011000", &mul); // ya con el 1 de sf agregaB
-        //  dictionary_put(opcodesMap, "10110100", &Cbz); // ya con el 1 de sf agregaB
-        //  dictionary_put(opcodesMap, "10110101", &Cbnz); // ya con el 1 de sf agregaB
+        dictionary_put(opcodesMap, "10001011000", &AddExtendedReg); // ya con el 1 de sf agregaB
+        dictionary_put(opcodesMap, "10010001", &AddImmediate); // ya con el 1 de sf agregaB
+        dictionary_put(opcodesMap, "10011011000", &mul); // ya con el 1 de sf agregaB
+        dictionary_put(opcodesMap, "10110100", &Cbz); // ya con el 1 de sf agregaB
+        dictionary_put(opcodesMap, "10110101", &Cbnz); // ya con el 1 de sf agregaB
         puts("crea dict");
 
     } 
