@@ -8,7 +8,6 @@ void Stur(char * restOfInstruction){
     //00 del 11 al 10 
     //Rn del 9 al 5 
     //Rd 4 al 0
-    
 
     char * immStr = malloc(9); 
     strncpy(immStr, restOfInstruction, 9);
@@ -111,8 +110,6 @@ void Sturh(char * restOfInstruction){
         offset |= ~((1 << 9) - 1); // Extensión de signo para un valor de 9 bits
     }
     free(immStr);
-    
-
 
     // Decodificar Rn del 9 al 5
     char * RnStr = malloc(5);
