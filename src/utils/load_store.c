@@ -49,47 +49,43 @@ void Stur(char * restOfInstruction){
 
 void Sturb(char * restOfInstruction){
     puts("Sturb");
-    //bit 22 es N 
-    //imm del 20 al 12 inclusives 
-    //00 del 11 al 10 
-    //Rn del 9 al 5 
-    //Rd 4 al 0
-    
+    // bit 22 es N 
+    // imm del 20 al 12 inclusives 
+    // 00 del 11 al 10 
+    // Rn del 9 al 5 
+    // Rd 4 al 0
 
     char * immStr = malloc(9); 
     strncpy(immStr, restOfInstruction, 9);
-    int offset = (int) strtol(immStr, NULL, 2);
+    int immNum = (int) strtol(immStr, NULL, 2);
 
-
-    if ((offset & (1 << 8)) != 0) { // Comprobar si el bit más significativo está activado para extensión de signo
-        offset |= ~((1 << 9) - 1); // Extensión de signo para un valor de 9 bits
+    if ((immNum & (1 << 8)) != 0) { // Comprobar si el bit más significativo está activado para extensión de signo
+        immNum |= ~((1 << 9) - 1); // Extensión de signo para un valor de 9 bits
     }
     free(immStr);
-    
-
 
     // Decodificar Rn del 9 al 5
     char * RnStr = malloc(5);
-    strncpy(RnStr, restOfInstruction + 11, 5);
+    strncpy(RnStr, restOfInstruction + 9+2, 5);
     int RnNum = (int) strtol(RnStr, NULL, 2);
-    uint64_t baseAddress = CURRENT_STATE.REGS[RnNum];
+    uint64_t rnContent = CURRENT_STATE.REGS[RnNum];
     free(RnStr);
     
     // extraemos Rt, el índice del registro destino
     char * RtStr = malloc(5);
     strncpy(RtStr, restOfInstruction + 16, 5);
     int RtNum = (int) strtol(RtStr, NULL, 2);
-    uint8_t data = CURRENT_STATE.REGS[RtNum] & 0xFF; // Solo el byte menos significativo
-
+    uint64_t rtContent = CURRENT_STATE.REGS[RtNum];
     free(RtStr);
 
-    // Realizamos la operación de desplazamiento lógico a la derecha
-    // uint64_t result = rnContent >> shiftAmount;
-    uint64_t effectiveAddress = baseAddress + offset - 0x10000000;
-    mem_write_32(effectiveAddress, data);
+    // Se escribe solamente el byte menos significativo usando mem_write_32
+    uint8_t rtByte = rtContent & 0xFFFFFFFF;
+    // Asumimos que mem_write_32 escribe los 32 bits, pero los bits superiores no se deben modificar.
+    // Dado que solo queremos escribir un byte, los otros deben ser 0.
+    mem_write_32((rnContent + immNum), rtByte);
 
-    NEXT_STATE.PC  += 4;
-    printf("Stored byte 0x%02x at simulated memory address 0x%lx\n", data, effectiveAddress);
+    NEXT_STATE.PC += 4;
+    printf("Stored byte 0x%02x at simulated memory address 0x%lx\n", rtByte, (rnContent + immNum));
     return ;
 }
 
@@ -104,38 +100,38 @@ void Sturh(char * restOfInstruction){
 
     char * immStr = malloc(9); 
     strncpy(immStr, restOfInstruction, 9);
-    int offset = (int) strtol(immStr, NULL, 2);
+    int immNum = (int) strtol(immStr, NULL, 2);
 
-
-    if ((offset & (1 << 8)) != 0) { // Comprobar si el bit más significativo está activado para extensión de signo
-        offset |= ~((1 << 9) - 1); // Extensión de signo para un valor de 9 bits
+    if ((immNum & (1 << 8)) != 0) { // Comprobar si el bit más significativo está activado para extensión de signo
+        immNum |= ~((1 << 9) - 1); // Extensión de signo para un valor de 9 bits
     }
     free(immStr);
 
     // Decodificar Rn del 9 al 5
     char * RnStr = malloc(5);
-    strncpy(RnStr, restOfInstruction + 11, 5);
+    strncpy(RnStr, restOfInstruction + 9+2, 5);
     int RnNum = (int) strtol(RnStr, NULL, 2);
-    uint64_t baseAddress = CURRENT_STATE.REGS[RnNum];
+    uint64_t rnContent = CURRENT_STATE.REGS[RnNum];
     free(RnStr);
     
     // extraemos Rt, el índice del registro destino
     char * RtStr = malloc(5);
     strncpy(RtStr, restOfInstruction + 16, 5);
     int RtNum = (int) strtol(RtStr, NULL, 2);
-    uint16_t data = CURRENT_STATE.REGS[RtNum] & 0xFFFF; // Solo el byte menos significativo
-
+    uint64_t rtContent = CURRENT_STATE.REGS[RtNum];
     free(RtStr);
 
-    // Realizamos la operación de desplazamiento lógico a la derecha
-    // uint64_t result = rnContent >> shiftAmount;
-    uint64_t effectiveAddress = baseAddress + offset- 0x10000000;
-    mem_write_32(effectiveAddress, data);
+    // Se escribe solamente el byte menos significativo usando mem_write_32
+    uint16_t rtByte = rtContent & 0xFFFFFFFF;
+    // Asumimos que mem_write_32 escribe los 32 bits, pero los bits superiores no se deben modificar.
+    // Dado que solo queremos escribir un byte, los otros deben ser 0.
+    mem_write_32((rnContent + immNum), rtByte);
 
-    NEXT_STATE.PC  += 4;
-    printf("Stored byte 0x%02x at simulated memory address 0x%lx\n", data, effectiveAddress);
+    NEXT_STATE.PC += 4;
+    printf("Stored byte 0x%02x at simulated memory address 0x%lx\n", rtByte, (rnContent + immNum));
     return ;
 }
+
 
 void Ldur(char * restOfInstruction){
     puts("Ldur");
