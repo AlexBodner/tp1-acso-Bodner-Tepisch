@@ -84,40 +84,67 @@ void Bcond(char * restOfInstruction){
         if (CURRENT_STATE.FLAG_Z == 1){
             NEXT_STATE.PC += immNum;
         }
+        else{
+            //no hacer nada porque no es la instruccion adecuada? preguntar
+            NEXT_STATE.PC += 4;
+        };
+        return;
     }
     else if (condNum == 1){
         printf("BNE\n");
         if (CURRENT_STATE.FLAG_Z == 0){
             NEXT_STATE.PC += immNum;
         }
+        else{
+            //no hacer nada porque no es la instruccion adecuada? preguntar
+            NEXT_STATE.PC += 4;
+        };
+        return;
     }
     else if (condNum == 12){
         printf("BGT\n");
         if (CURRENT_STATE.FLAG_N == 0){
             NEXT_STATE.PC += immNum;
         }
+        else{
+            //no hacer nada porque no es la instruccion adecuada? preguntar
+            NEXT_STATE.PC += 4;
+        };
+        return;
     }
     else if (condNum == 11){
         printf("BLT\n");
         if (CURRENT_STATE.FLAG_N != 0){
             NEXT_STATE.PC += immNum;
         }
+        else{
+            //no hacer nada porque no es la instruccion adecuada? preguntar
+            NEXT_STATE.PC += 4;
+        };
+        return;
     }
     else if (condNum == 10){
         printf("BGE\n");
         if (CURRENT_STATE.FLAG_N == 0){
             NEXT_STATE.PC += immNum;
         }
+        else{
+            //no hacer nada porque no es la instruccion adecuada? preguntar
+            NEXT_STATE.PC += 4;
+        };
+        return;
     }
     else if (condNum == 13){
         printf("BLE\n");
         if (!(CURRENT_STATE.FLAG_N == 0)){
             NEXT_STATE.PC += immNum;
         }
+        else{
+            //no hacer nada porque no es la instruccion adecuada? preguntar
+            NEXT_STATE.PC += 4;
+        };
+        return;
     }
-    else{
-        //no hacer nada porque no es la instruccion adecuada? preguntar
-    };
     NEXT_STATE.PC += 4;
     return ;
 }

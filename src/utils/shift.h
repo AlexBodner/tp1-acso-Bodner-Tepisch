@@ -4,5 +4,4 @@
 #include <string.h>
 #include "../shell.h"
 
-void LslImm(char * restOfInstruction);
-void LsrImm(char * restOfInstruction);
+void LsImm(char * restOfInstruction);
