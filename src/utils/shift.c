@@ -1,7 +1,6 @@
 #include "shift.h"
 
 void LsImm(char * restOfInstruction){
-    puts("LsImm");
     //bit 22 es N 
     //immr del 21 al 16 inclusives 
     //imms del 15 al 10 
@@ -12,7 +11,6 @@ void LsImm(char * restOfInstruction){
     strncpy(NStr, restOfInstruction, 1);
     int N = (int) strtol(NStr, NULL, 2);
     free(NStr);
-    printf("N %i\n", N);
 
 
     // guardamos el inmediatoR 
@@ -44,18 +42,12 @@ void LsImm(char * restOfInstruction){
 
     //Hacemos la operacion
     if (imms!=31 && N==1){
-        puts("LslImm");
-        printf("immr %i\n", immr);
         uint64_t result = rnContent << immr;
         NEXT_STATE.REGS[RdNum]  = result;
-        printf("Result %i\n", result);
     }
     else if (imms==31 && N==1){
-        puts("LsrImm");
-        printf("immr %i\n", immr);
         uint64_t result = rnContent >> immr;
         NEXT_STATE.REGS[RdNum]  = result;
-        printf("Result %i\n", result);
     }
 
 
@@ -64,7 +56,6 @@ void LsImm(char * restOfInstruction){
 }
 
 void LsrImm(char * restOfInstruction){
-    puts("LsrImm");
     //bit 22 es N 
     //immr del 21 al 16 inclusives 
     //imms del 15 al 10 
@@ -100,8 +91,6 @@ void LsrImm(char * restOfInstruction){
         NEXT_STATE.REGS[RdNum]  = result;
     }
 
-    printf("Rd %i\n", RdNum);
-    printf("Result %i\n", result);
     // Actualizamos el PC al siguiente valor (suponiendo que el tamaño de la instrucción es 4 bytes)
     NEXT_STATE.PC  += 4;
     return ;

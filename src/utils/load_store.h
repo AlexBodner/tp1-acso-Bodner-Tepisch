@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <stdlib.h>
 
 void Stur(char * restOfInstruction);
 void Sturb(char * restOfInstruction);

@@ -3,5 +3,6 @@
 #include <assert.h>
 #include <string.h>
 #include "../shell.h"
+#include <stdlib.h>
 
 void LsImm(char * restOfInstruction);

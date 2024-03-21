@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <string.h>
 #include "../shell.h"
-
+#include <stdlib.h>
 
 void B(char * restOfInstruction);
 void Br(char * restOfInstruction);

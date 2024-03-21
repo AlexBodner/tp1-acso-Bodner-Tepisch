@@ -20,7 +20,6 @@ int64_t signExtendNto64(int64_t value,int n) {
 }
 
 void B(char * restOfInstruction){
-    puts("B");    
     //imm del 25 al 0 inclusives 
 
     // guardamos el inmediato 
@@ -30,13 +29,11 @@ void B(char * restOfInstruction){
     free(immStr);
 
     immNum = signExtend26to64(immNum) << 2;
-    printf("Result %ld\n", immNum);
     NEXT_STATE.PC = CURRENT_STATE.PC+immNum;
     return ;
 }
 
 void Br(char * restOfInstruction){
-    puts("Br");    
     //ADDS Xn & imm to Xd
     //Rn del 9 al 5 inclusives 
 
@@ -46,7 +43,6 @@ void Br(char * restOfInstruction){
     strncpy(RnStr, restOfInstruction , 5);
     int RnNum= (int) strtol(RnStr, NULL, 2);
     free(RnStr);
-    printf("Result %i\n", RnNum);
     
     NEXT_STATE.PC = CURRENT_STATE.REGS[RnNum];
     return ;
@@ -61,7 +57,6 @@ int calculate_branch_offset(int imm19) {
 }
 
 void Bcond(char * restOfInstruction){
-    puts("Bcond");    
     //imm del 23 al 5 inclusives 
     //cond del 3 al 0 inclusives 
     //guardamos cond
@@ -77,10 +72,7 @@ void Bcond(char * restOfInstruction){
     int condNum= (int) strtol(condStr, NULL, 2);
     free(condStr);
     
-    printf("Result %i\n", condNum);
-    printf("Result %d\n", immNum);
     if (condNum == 0){
-        printf("BEQ\n");
         if (CURRENT_STATE.FLAG_Z == 1){
             NEXT_STATE.PC += immNum;
         }
@@ -91,7 +83,6 @@ void Bcond(char * restOfInstruction){
         return;
     }
     else if (condNum == 1){
-        printf("BNE\n");
         if (CURRENT_STATE.FLAG_Z == 0){
             NEXT_STATE.PC += immNum;
         }
@@ -102,7 +93,6 @@ void Bcond(char * restOfInstruction){
         return;
     }
     else if (condNum == 12){
-        printf("BGT\n");
         if (CURRENT_STATE.FLAG_N == 0){
             NEXT_STATE.PC += immNum;
         }
@@ -113,7 +103,6 @@ void Bcond(char * restOfInstruction){
         return;
     }
     else if (condNum == 11){
-        printf("BLT\n");
         if (CURRENT_STATE.FLAG_N != 0){
             NEXT_STATE.PC += immNum;
         }
@@ -124,7 +113,6 @@ void Bcond(char * restOfInstruction){
         return;
     }
     else if (condNum == 10){
-        printf("BGE\n");
         if (CURRENT_STATE.FLAG_N == 0){
             NEXT_STATE.PC += immNum;
         }
@@ -135,7 +123,6 @@ void Bcond(char * restOfInstruction){
         return;
     }
     else if (condNum == 13){
-        printf("BLE\n");
         if (!(CURRENT_STATE.FLAG_N == 0)){
             NEXT_STATE.PC += immNum;
         }
@@ -155,7 +142,6 @@ void Bcond(char * restOfInstruction){
 
 
 void Cbz(char * restOfInstruction){
-    puts("Cbz");    
     char * immStr = malloc(sizeof(char) * (19));
     strncpy(immStr, restOfInstruction, 19);
     int64_t immNum = strtol(immStr, NULL, 2);
@@ -180,7 +166,6 @@ void Cbz(char * restOfInstruction){
 }
 
 void Cbnz(char * restOfInstruction){
-    puts("Cbz");    
     char * immStr = malloc(sizeof(char) * (19));
     strncpy(immStr, restOfInstruction, 19);
     int64_t immNum = strtol(immStr, NULL, 2);
