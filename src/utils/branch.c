@@ -20,9 +20,7 @@ int64_t signExtendNto64(int64_t value,int n) {
 }
 
 void B(char * restOfInstruction){
-    //imm del 25 al 0 inclusives 
 
-    // guardamos el inmediato 
     char * immStr = malloc(sizeof(char) * (26));
     strncpy(immStr, restOfInstruction , 26);
     int64_t immNum= strtol(immStr, NULL, 2);
@@ -34,11 +32,7 @@ void B(char * restOfInstruction){
 }
 
 void Br(char * restOfInstruction){
-    //ADDS Xn & imm to Xd
-    //Rn del 9 al 5 inclusives 
 
-    // guardamos el Rn 
-    //guardamos Rn
     char * RnStr = malloc(sizeof(char) * (5));
     strncpy(RnStr, restOfInstruction , 5);
     int RnNum= (int) strtol(RnStr, NULL, 2);
@@ -57,10 +51,7 @@ int calculate_branch_offset(int imm19) {
 }
 
 void Bcond(char * restOfInstruction){
-    //imm del 23 al 5 inclusives 
-    //cond del 3 al 0 inclusives 
-    //guardamos cond
-    //guardamos el inmediato 
+    //Branch conditional
     char * immStr = malloc(sizeof(char) * (19));
     strncpy(immStr, restOfInstruction , 19);
     int immNum= strtol(immStr, NULL, 2);

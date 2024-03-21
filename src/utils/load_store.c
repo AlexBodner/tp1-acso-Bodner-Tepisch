@@ -2,12 +2,6 @@
 
 
 void Stur(char * restOfInstruction){
-    //bit 22 es N 
-    //imm del 20 al 12 inclusives 
-    //00 del 11 al 10 
-    //Rn del 9 al 5 
-    //Rd 4 al 0
-
     char * immStr = malloc(9); 
     strncpy(immStr, restOfInstruction, 9);
     int immNum = (int) strtol(immStr, NULL, 2);
@@ -19,7 +13,7 @@ void Stur(char * restOfInstruction){
     
 
 
-    // Decodificar Rn del 9 al 5
+    // Decodificar Rn 
     char * RnStr = malloc(5);
     strncpy(RnStr, restOfInstruction + 9+2, 5);
     int RnNum = (int) strtol(RnStr, NULL, 2);
@@ -46,12 +40,6 @@ void Stur(char * restOfInstruction){
 }
 
 void Sturb(char * restOfInstruction){
-    // bit 22 es N 
-    // imm del 20 al 12 inclusives 
-    // 00 del 11 al 10 
-    // Rn del 9 al 5 
-    // Rd 4 al 0
-
     char * immStr = malloc(9); 
     strncpy(immStr, restOfInstruction, 9);
     int immNum = (int) strtol(immStr, NULL, 2);
@@ -61,7 +49,7 @@ void Sturb(char * restOfInstruction){
     }
     free(immStr);
 
-    // Decodificar Rn del 9 al 5
+    // Decodificar Rn 
     char * RnStr = malloc(5);
     strncpy(RnStr, restOfInstruction + 9+2, 5);
     int RnNum = (int) strtol(RnStr, NULL, 2);
@@ -81,7 +69,7 @@ void Sturb(char * restOfInstruction){
     uint32_t previousData = mem_read_32(rnContent + immNum)&0b11111111111111111111111100000000;
     
     // Asumimos que mem_write_32 escribe los 32 bits, pero los bits superiores no se deben modificar.
-    // Dado que solo queremos escribir un byte, los otros deben ser 0.
+    // Dado que solo queremos escribir un byte, los otros deben ser los previos.
     mem_write_32((rnContent + immNum), rtByte+previousData);
 
     NEXT_STATE.PC += 4;
@@ -89,12 +77,6 @@ void Sturb(char * restOfInstruction){
 }
 
 void Sturh(char * restOfInstruction){
-    //bit 22 es N 
-    //imm del 20 al 12 inclusives 
-    //00 del 11 al 10 
-    //Rn del 9 al 5 
-    //Rd 4 al 0
-    
 
     char * immStr = malloc(9); 
     strncpy(immStr, restOfInstruction, 9);
@@ -119,10 +101,9 @@ void Sturh(char * restOfInstruction){
     uint64_t rtContent = CURRENT_STATE.REGS[RtNum];
     free(RtStr);
 
-    // Se escribe solamente el byte menos significativo usando mem_write_32
+    // Se escribe solamente la word menos significativa usando mem_write_32
     uint16_t rtByte = rtContent & 0xFFFFFFFF;
-    // Asumimos que mem_write_32 escribe los 32 bits, pero los bits superiores no se deben modificar.
-    // Dado que solo queremos escribir un byte, los otros deben ser 0.
+
     mem_write_32((rnContent + immNum), rtByte);
 
     NEXT_STATE.PC += 4;
@@ -131,13 +112,6 @@ void Sturh(char * restOfInstruction){
 
 
 void Ldur(char * restOfInstruction){
-    //bit 22 es N 
-    //imm del 20 al 12 inclusives 
-    //00 del 11 al 10 
-    //Rn del 9 al 5 
-    //Rt 4 al 0
-    
-
     char * immStr = malloc(9); 
     strncpy(immStr, restOfInstruction, 9);
     int offset = (int) strtol(immStr, NULL, 2);
@@ -174,17 +148,9 @@ void Ldur(char * restOfInstruction){
 }
 
 void Ldurb(char * restOfInstruction){
-    //bit 22 es N 
-    //imm del 20 al 12 inclusives 
-    //00 del 11 al 10 
-    //Rn del 9 al 5 
-    //Rt 4 al 0
-    
-
     char * immStr = malloc(9); 
     strncpy(immStr, restOfInstruction, 9);
     int offset = (int) strtol(immStr, NULL, 2);
-
 
     if ((offset & (1 << 8)) != 0) { // Comprobar si el bit más significativo está activado para extensión de signo
         offset |= ~((1 << 9) - 1); // Extensión de signo para un valor de 9 bits
@@ -229,7 +195,7 @@ void Ldurh(char * restOfInstruction){
     
 
 
-    // Decodificar Rn del 9 al 5
+    // Decodificar Rn 
     char * RnStr = malloc(5);
     strncpy(RnStr, restOfInstruction + 11, 5);
     int RnNum = (int) strtol(RnStr, NULL, 2);

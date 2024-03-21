@@ -94,20 +94,20 @@ void addsImm(char * restOfInstruction){
 
 
 void subs_compExtendedReg(char * restOfInstruction){
-        //guardamos Rm
+    //Leemos Rm
     char * RmStr = malloc(sizeof(char) * (5));
     strncpy(RmStr, restOfInstruction, 5);
     int RmNum= (int) strtol(RmStr, NULL, 2);
     int64_t rmContent = CURRENT_STATE.REGS[RmNum];
 
 
-    //guardamos Rn
+    //Leemos Rn
     char * RnStr = malloc(sizeof(char) * (5));
     strncpy(RnStr, restOfInstruction+5+6 , 5);
     int RnNum= (int) strtol(RnStr, NULL, 2);
     int64_t rnContent = CURRENT_STATE.REGS[RnNum];
 
-    //guardamos Rd
+    //Leemos Rd
     char * RdStr = malloc(sizeof(char) * (5));
     strncpy(RdStr, restOfInstruction+5+6+5 , 5);
     int RdNum= (int) strtol(RdStr, NULL, 2);
@@ -132,7 +132,7 @@ void subs_compExtendedReg(char * restOfInstruction){
 
 
 void subs_compImm(char * restOfInstruction){    
-    //ADDS Xn - imm to Xd
+    //Subs Xn - imm to Xd
     //bits 23 y 22 son de shift y deberian ser 00 
     //imm del 21 al 10 inclusives 
     //Rn del 9 al 5 
@@ -185,25 +185,17 @@ void subs_compImm(char * restOfInstruction){
 }
 
 void AndsShiftedReg(char * restOfInstruction){
-    //ADDS Xn & imm to Xd
-    //bits 23 y 22 son de shift y deberian ser 00 
-    //N es 0 en 21
-    //Rm del 20 al 16 
-    //imm del 15 al 10 inclusives 
-    //Rn del 9 al 5 
-    //Rd 4 al 0
-    
-    // guardamos el Rm 
+    // Leemos el Rm 
     char * RmStr = malloc(sizeof(char) * (5));
     strncpy(RmStr, restOfInstruction+3 , 5);
     uint64_t RmNum= (uint64_t) strtol(RmStr, NULL, 2);
 
-    // guardamos el inmediato 
+    // Leemos el inmediato 
     char * immStr = malloc(sizeof(char) * (6));
     strncpy(immStr, restOfInstruction+8 , 6);
     uint64_t immNum= (uint64_t) strtol(immStr, NULL, 2); //checkear uint64_t
 
-    //guardamos Rn
+    //Leemos Rn
     char * RnStr = malloc(sizeof(char) * (5));
     strncpy(RnStr, restOfInstruction+14 , 5);
     uint64_t RnNum= (uint64_t) strtol(RnStr, NULL, 2);
@@ -230,14 +222,6 @@ void AndsShiftedReg(char * restOfInstruction){
 
 
 void EorShiftedReg(char * restOfInstruction){
-    //ADDS Xn & imm to Xd
-    //bits 23 y 22 son de shift y deberian ser 00
-    //N es 0 en 21
-    //Rm del 20 al 16 
-    //imm del 15 al 10 inclusives 
-    //Rn del 9 al 5 
-    //Rd 4 al 0
-    
     // shift
     char * shiftBytes = malloc(sizeof(char) * (2));
     strncpy(shiftBytes, restOfInstruction , 2);
@@ -246,19 +230,19 @@ void EorShiftedReg(char * restOfInstruction){
     int shiftStatusLSL = strcmp(shiftBytes,"00");
     int shiftStatusLSR = strcmp(shiftBytes,"01");
 
-    // guardamos el Rm 
+    // Leemos el Rm 
     char * RmStr = malloc(sizeof(char) * (5));
     strncpy(RmStr, restOfInstruction+3 , 5);
     int RmNum= (int) strtol(RmStr, NULL, 2);
     int64_t RmContent = CURRENT_STATE.REGS[RmNum];
 
-    // guardamos el inmediato 
+    // Leemos el inmediato 
     char * immStr = malloc(sizeof(char) * (6));
     strncpy(immStr, restOfInstruction+8 , 6);
     int immNum= (int) strtol(immStr, NULL, 2);
 
 
-    //guardamos Rn
+    //Leemos Rn
     char * RnStr = malloc(sizeof(char) * (5));
     strncpy(RnStr, restOfInstruction+14 , 5);
     int RnNum= (int) strtol(RnStr, NULL, 2);
@@ -277,7 +261,7 @@ void EorShiftedReg(char * restOfInstruction){
         rnContent >> RmContent;
     } 
     else{
-        //no hacer nada porque no es la instruccion adecuada? preguntar
+        //no es la instruccion adecuada
     }
 
 
@@ -298,22 +282,12 @@ void EorShiftedReg(char * restOfInstruction){
 }
 
 void OrrShiftedReg(char * restOfInstruction){
-    //ADDS Xn & imm to Xd
-    //bits 23 y 22 son de shift y deberian ser 00
-    //N es 0 en 21
-    //Rm del 20 al 16 
-    //imm del 15 al 10 inclusives 
-    //Rn del 9 al 5 
-    //Rd 4 al 0
-    
-    // guardamos el Rm 
+
     char * RmStr = malloc(sizeof(char) * (5));
     strncpy(RmStr, restOfInstruction+3 , 5);
     int RmNum= (int) strtol(RmStr, NULL, 2);
     uint64_t RmContent = CURRENT_STATE.REGS[RmNum];
 
-
-    //guardamos Rn
     char * RnStr = malloc(sizeof(char) * (5));
     strncpy(RnStr, restOfInstruction+14 , 5);
     int RnNum= (int) strtol(RnStr, NULL, 2);
@@ -322,6 +296,7 @@ void OrrShiftedReg(char * restOfInstruction){
     char * RdStr = malloc(sizeof(char) * (5));
     strncpy(RdStr, restOfInstruction+19 , 5);
     uint64_t RdNum= (uint64_t) strtol(RdStr, NULL, 2);
+
     //Hacemos la operacion
     uint64_t result = rnContent | RmContent;
 
@@ -352,7 +327,7 @@ void subImmediate(char * restOfInstruction){
     }
 
 
-    //guardamos Rn
+    
     char * RnStr = malloc(sizeof(char) * (5));
     strncpy(RnStr, restOfInstruction+14 , 5);
     int RnNum= (int) strtol(RnStr, NULL, 2);
@@ -383,7 +358,7 @@ void subExtendedReg(char * restOfInstruction){
     int64_t rmContent = CURRENT_STATE.REGS[RmNum];
 
 
-    //guardamos Rn
+    
     char * RnStr = malloc(sizeof(char) * (5));
     strncpy(RnStr, restOfInstruction+5+6 , 5);
     int RnNum= (int) strtol(RnStr, NULL, 2);
@@ -422,7 +397,7 @@ void AddImmediate(char * restOfInstruction){
         immNum = immNum << 12;
     }
 
-    //guardamos Rn
+    
     char * RnStr = malloc(sizeof(char) * (5));
     strncpy(RnStr, restOfInstruction+14 , 5);
     int RnNum= (int) strtol(RnStr, NULL, 2);
@@ -456,7 +431,6 @@ void AddExtendedReg(char * restOfInstruction){
     int64_t rmContent = CURRENT_STATE.REGS[RmNum];
 
 
-    //guardamos Rn
     char * RnStr = malloc(sizeof(char) * (5));
     strncpy(RnStr, restOfInstruction+5+6 , 5);
     int RnNum= (int) strtol(RnStr, NULL, 2);
@@ -491,7 +465,7 @@ void mul(char * restOfInstruction){
     int64_t rmContent = CURRENT_STATE.REGS[RmNum];
 
 
-    //guardamos Rn
+    
     char * RnStr = malloc(sizeof(char) * (5));
     strncpy(RnStr, restOfInstruction+5+6 , 5);
     int RnNum= (int) strtol(RnStr, NULL, 2);
