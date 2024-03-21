@@ -79,7 +79,7 @@ void Sturb(char * restOfInstruction){
     free(RtStr);
 
     // Se escribe solamente el byte menos significativo usando mem_write_32
-    uint8_t rtByte = rtContent & 0xFFFFFFFF;
+    uint8_t rtByte = rtContent & 0xFF;
     // Asumimos que mem_write_32 escribe los 32 bits, pero los bits superiores no se deben modificar.
     // Dado que solo queremos escribir un byte, los otros deben ser 0.
     mem_write_32((rnContent + immNum), rtByte);
