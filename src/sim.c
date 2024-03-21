@@ -6,7 +6,7 @@
 #include "HashMap/HashMap.h"
 
 
- #include "utils/branch.h"
+#include "utils/branch.h"
 #include "utils/load_store.h"
 #include "./utils/mathOps.h"
 #include "utils/shift.h"
@@ -21,7 +21,6 @@ void HLT(char * restOfInstruction){
 
 
 void Movz(char * restOfInstruction) {
-
     // Extraer el valor inmediato del resto de la instrucción
     // Asumiremos que el valor inmediato viene en los últimos 16 bits de la instrucción
     char * immStr = malloc(16); // 16 bits para el valor inmediato + espacio para el terminador nulo
