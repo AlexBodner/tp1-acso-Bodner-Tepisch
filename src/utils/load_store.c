@@ -104,9 +104,9 @@ void Sturh(char * restOfInstruction){
     uint32_t previousData = mem_read_32(rnContent + immNum)&0b11111111111111110000000000000000;
     
     // Se escribe solamente la word menos significativa usando mem_write_32
-    uint32_t rtByte = rtContent & 0xFFFF;
+    uint32_t rtHw = rtContent & 0xFFFF;
 
-    mem_write_32((rnContent + immNum), rtByte+previousData);
+    mem_write_32((rnContent + immNum), rtHw+previousData);
 
     NEXT_STATE.PC += 4;
     return ;
