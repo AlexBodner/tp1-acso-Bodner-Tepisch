@@ -101,10 +101,12 @@ void Sturh(char * restOfInstruction){
     uint64_t rtContent = CURRENT_STATE.REGS[RtNum];
     free(RtStr);
 
+    uint32_t previousData = mem_read_32(rnContent + immNum)&0b11111111111111110000000000000000;
+    
     // Se escribe solamente la word menos significativa usando mem_write_32
-    uint16_t rtByte = rtContent & 0xFFFFFFFF;
+    uint32_t rtByte = rtContent & 0xFFFF;
 
-    mem_write_32((rnContent + immNum), rtByte);
+    mem_write_32((rnContent + immNum), rtByte+previousData);
 
     NEXT_STATE.PC += 4;
     return ;
